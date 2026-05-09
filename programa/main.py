@@ -18,41 +18,14 @@ def menu_principal():
             except:
                 print("Error: la opción debe ser un número\n")
         if opcion_ingresada == 1:
-            return control_acceso()
+            if control_acceso() == 1:
+                return menu_administrador()
         elif opcion_ingresada == 2:
             "menu_usuario()"
         elif opcion_ingresada == 3:
             exit()
         else:
             print("Error: la opción ingresada no existe\n")
-
-def control_acceso():
-    usuarios_cargados = cargar_usuarios()
-    if not usuarios_cargados:
-        print("Error: No se encontraron usuarios disponibles")
-    else:
-        for usuarios in usuarios_cargados:
-            usuario = usuarios.strip().split(";")[0]
-            clave = usuarios.strip().split(";")[1]
-            usuario_valido = False
-            while not usuario_valido:
-                usuario_ingresado = input("Ingrese su nombre de usuario ( o s para salir): ")
-                if usuario_ingresado == usuario:
-                    usuario_valido = True
-                elif usuario_ingresado == "s":
-                    return menu_principal()
-                else:
-                    print("Error: El usuario ingresado no existe")
-            clave_valida = False
-            while not clave_valida:
-                clave_ingresada = input("Ingrese su contraseña ( o s para salir): ")
-                if clave_ingresada == clave:
-                    clave_valida = True
-                    menu_administrador()
-                elif clave_ingresada == "s":
-                    return menu_principal()
-                else:
-                    print("Error: La contraseña es incorrecta")
 
 
 def menu_administrador():
@@ -378,8 +351,7 @@ def eliminar_modelo():
     mostrar_modelos()
     return menu_gestion_modelos()
 
-
-
+menu_principal()
 
 
 
