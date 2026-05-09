@@ -1,10 +1,18 @@
 from vistas import mostrar_marcas
 
+
+def limpiar_contenido(contenido):
+    resultado = []
+    for linea in contenido:
+        resultado += [linea.strip()]
+    return resultado
+
 def cargar_marcas():
     ruta_archivo = "archivos/aviones.txt"
     try:
         with open(ruta_archivo, "r", encoding="utf-8") as archivo:
             contenido = archivo.readlines()
+        contenido = limpiar_contenido(contenido)
         return contenido
     except:
         print("Error: el archivo aviones.txt no existe")
@@ -14,9 +22,10 @@ def cargar_modelos():
     try:
         with open(ruta_archivo, "r", encoding="utf-8") as archivo:
             contenido = archivo.readlines()
+        contenido = limpiar_contenido(contenido)
         return contenido
     except:
-        print("Error: el archivo modeloAviones.txt no existe")
+        print("Error: el archivo aviones.txt no existe")
 
 
 def cargar_usuarios():
@@ -24,9 +33,10 @@ def cargar_usuarios():
     try:
         with open(ruta_archivo, "r", encoding="utf-8") as archivo:
             contenido = archivo.readlines()
+        contenido = limpiar_contenido(contenido)
         return contenido
     except:
-        print("Error: el archivo acceso.txt no existe")
+        print("Error: el archivo aviones.txt no existe")
 
 
 def cargar_aviones():
@@ -34,8 +44,9 @@ def cargar_aviones():
     try:
         with open(ruta_archivo, "r", encoding="utf-8") as archivo:
             contenido = archivo.readlines()
+        contenido = limpiar_contenido(contenido)
         return contenido
     except:
-        print("Error: el archivo acceso.txt no existe")
+        print("Error: el archivo aviones.txt no existe")
 
 
