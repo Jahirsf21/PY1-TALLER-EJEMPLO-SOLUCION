@@ -1,4 +1,4 @@
-from acceso_datos import cargar_marcas, cargar_modelos, cargar_aviones
+from acceso_datos import *
 
 def validar_nombre_marca(nombre):
     contador_digitos = 0
@@ -74,5 +74,3 @@ def existe_modelo_asociado(modelo_ingresado):
             if modelo_ingresado.strip() == modelo:
                 return True
         return False
-    
-
