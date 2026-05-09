@@ -1,5 +1,5 @@
-from validadores import validar_nombre, existe_marca, existe_marca_asociada
-from acceso_datos import cargar_usuarios
+from validadores import validar_nombre_marca, validar_nombre_modelo, existe_marca, existe_marca_asociada,existe_modelo, existe_modelo_asociado
+from acceso_datos import cargar_usuarios, cargar_marcas, cargar_modelos
 from vistas import mostrar_marcas
 
 def menu_principal():
@@ -99,6 +99,7 @@ def menu_gestion_marcas():
         print("(3) Modificar marca")
         print("(4) Mostrar marcas")
         print("(5) Regresar al menú principal")
+        marcas = cargar_marcas()
         opcion_ingresada = input("Ingresa una opción: ")
         if opcion_ingresada != "":
             try:
@@ -108,11 +109,20 @@ def menu_gestion_marcas():
         if opcion_ingresada == 1:
             return incluir_marca()
         elif opcion_ingresada == 2:
-            eliminar_marca()
+            if not marcas:
+                print("Error: No se pueden eliminar marcas ya que no hay marcas registradas")
+            else:
+                return eliminar_marca()
         elif opcion_ingresada == 3:
-            modificar_marca()
+            if not marcas:
+                print("Error: No se pueden modificar marcas ya que no hay marcas registradas")
+            else:
+                return modificar_marca()
         elif opcion_ingresada == 4:
-            mostrar_marcas()
+            if not marcas:
+                print("Error: No hay marcas registradas para mostrar")
+            else:
+                mostrar_marcas()
         elif opcion_ingresada == 5: 
             return menu_administrador()
         else:
@@ -127,11 +137,11 @@ def incluir_marca():
         if marca_ingresada != "":
             if existe_marca(marca_ingresada):
                 print("Error: esta marca ya existe")
-            elif not validar_nombre(marca_ingresada):
-                print("Error: el nombre no puede ser solo números")
+            elif not validar_nombre_marca(marca_ingresada):
+                print("Error: el nombre de la marca no puede ser solo números o de un solo caracter")
             else:
                 with open(ruta_archivo, "a", encoding="utf-8") as archivo:
-                    archivo.write(marca_ingresada + "\n")
+                    archivo.write(marca_ingresada.strip() + "\n")
                 print(f"Marca {marca_ingresada} agregada exitosamente")
                 mostrar_marcas()
                 marca_valida = True
@@ -152,16 +162,16 @@ def eliminar_marca():
         contenido_anterior += [marca]
     indice_valido = False
     while not indice_valido:
-        indice_ingresado = input("Ingrese el indice de la marca que desea eliminar (o 0 para salir): ")
+        indice_ingresado = input("Ingrese el número de opción de la marca que desea eliminar (o 0 para salir): ")
         if indice_ingresado == "":
-            print("Error: El indice no puede ser vacio")
+            print("Error: El número de opción no puede ser vacio")
         else:
             try:
                 indice_ingresado = int(indice_ingresado)
             except:
-                print("Error: el indice debe ser un valor númerico")
+                print("Error: el número de opción debe ser un valor númerico")
         if indice_ingresado < 0 or indice_ingresado > len(contenido_anterior):
-            print("Error: el indice ingresado no existe")
+            print("Error: la opción ingresada no existe")
         elif indice_ingresado == 0:
             return menu_gestion_marcas()
         elif existe_marca_asociada(contenido_anterior[indice_ingresado-1]):
@@ -190,17 +200,17 @@ def modificar_marca():
 
     indice_valido = False
     while not indice_valido:
-        indice_ingresado = input("Ingrese el indice de la marca que desea editar (o s para salir): ")
+        indice_ingresado = input("Ingrese el número de opción de la marca que desea editar (0 para salir): ")
         if indice_ingresado == "":
-            print("Error: El indice no puede ser vacio")
+            print("Error: El número de opción no puede ser vacio")
         else:
             try:
-                indice_ingresado = int(indice_ingresado)
+                int(indice_ingresado)
             except:
-                print("Error: el indice debe ser un valor númerico")
-        if indice_ingresado <= 0 or indice_ingresado > len(contenido_anterior):
-            print("Error: el indice ingresado no existe")
-        elif indice_ingresado == "s":
+                print("Error: el número de opción debe ser un valor númerico")
+        if indice_ingresado < 0 or indice_ingresado > len(contenido_anterior):
+            print("Error: la opcion ingresada no existe")
+        elif indice_ingresado == 0:
             return menu_gestion_marcas()
         else:
             indice_valido = True
@@ -211,10 +221,10 @@ def modificar_marca():
         if marca_ingresada != "":
             if existe_marca(marca_ingresada):
                 print("Error: esta marca ya existe")
-            elif not validar_nombre(marca_ingresada):
-                print("Error: el nombre no puede ser solo números")
+            elif not validar_nombre_marca(marca_ingresada):
+                print("Error: el nombre de la marca no puede ser solo números o de un solo caracter")
             else:
-                contenido_anterior[indice_ingresado-1] = marca_ingresada
+                contenido_anterior[indice_ingresado-1] = marca_ingresada.strip()
                 with open(ruta_archivo, "w", encoding="utf-8") as archivo:
                     for marca in contenido_anterior:
                         archivo.write(marca + "\n")
@@ -223,3 +233,143 @@ def modificar_marca():
                 marca_valida = True
 
     return menu_gestion_marcas()
+
+def menu_gestion_modelos():
+    print("\nPanel de administrador - gestión modelos")
+    while True:
+        print("====== Opciones disponibles ======")
+        print("(1) Incluir modelo")
+        print("(2) Eliminar modelo")
+        print("(3) Modificar modelo")
+        print("(4) Mostrar modelos")
+        print("(5) Regresar al menú principal")
+        marcas = cargar_marcas()
+        modelos = cargar_modelos()
+        opcion_ingresada = input("Ingresa una opción: ")
+        if opcion_ingresada != "":
+            try:
+                opcion_ingresada = int(opcion_ingresada)
+            except:
+                print("Error: la opción debe ser un número\n")
+        if opcion_ingresada == 1:
+            if not marcas:
+                print("Error: no se pueden crear modelos ya que no hay marcas registradas")
+            else:
+                return incluir_modelo()
+        elif opcion_ingresada == 2:
+            if not modelos:
+                print("Error: no hay modelos registrados")
+            else:
+                "return eliminar_modelo())"
+        elif opcion_ingresada == 3:
+            "modificar_marca()"
+        elif opcion_ingresada == 4:
+            "mostrar_marcas()"
+        elif opcion_ingresada == 5: 
+            return menu_administrador()
+        else:
+            print("Error: la opción ingresada no existe\n")
+
+def incluir_modelo():
+    ruta_archivo_modelos = "archivos/modeloAviones.txt"
+    ruta_archivo_marcas = "archivos/aviones.txt"
+    modelo_valido = False
+    while not modelo_valido:
+        modelo_ingresado = input("Ingrese el nombre del modelo (o s para salir): ")
+        if modelo_ingresado != "":
+            if existe_modelo(modelo_ingresado):
+                print("Error: el nombre de este modelo ya existe")
+            elif modelo_ingresado == "s":
+                return menu_gestion_modelos()
+            elif not validar_nombre_modelo(modelo_ingresado):
+                print("Error: el nombre del modelo no puede ser solo números o de un solo caracter")
+            else:
+                mostrar_marcas()
+
+                with open(ruta_archivo_marcas, "r", encoding="utf-8") as archivo:
+                    contenido = archivo.readlines()
+                contenido_marcas = []
+                for marcas in contenido:
+                    marca = marcas.strip()
+                    contenido_marcas += [marca]
+                indice_valido = False
+                while not indice_valido:
+                    indice_ingresado = input("Ingrese el número de opcion de la marca que desea usar (0 s para salir): ")
+                    if indice_ingresado == "":
+                        print("Error: El número de opción no puede ser vacio")
+                    else:
+                        try:
+                            indice_ingresado = int(indice_ingresado)
+                        except:
+                            print("Error: el número de opción debe ser un valor númerico")
+                    if indice_ingresado < 0 or indice_ingresado > len(contenido_marcas):
+                        print("Error: la opcion ingresada no existe")
+                    elif indice_ingresado == 0:
+                        return menu_gestion_modelos()
+                    else:
+                        indice_valido = True
+                        marca_seleccionada = contenido_marcas[indice_ingresado-1]
+
+                asiento_valido = False
+                while not asiento_valido:
+                    cantidad_ingresada = input("Ingrese la cantidad de asiento para la clase ejecutiva (o -1 para salir): ")
+                    if cantidad_ingresada == "":
+                        print("Error: la cantidad de asiento no puede ser vacio")
+                    else:
+                        try:
+                            cantidad_ingresada = int(cantidad_ingresada)
+                        except:
+                            print("Error: el número de asientos debe ser un valor númerico")
+                    if cantidad_ingresada == -1:
+                        return menu_gestion_modelos()
+                    elif cantidad_ingresada <= 0:
+                        print("Error: la cantidad de asientos no puede menor a 0")
+                    else:
+                        asiento_valido = True
+                asientos_clase_ejecutiva = cantidad_ingresada
+
+                asiento_valido = False
+                while not asiento_valido:
+                    cantidad_ingresada = input("Ingrese la cantidad de asiento para la clase turista (o -1 para salir): ")
+                    if cantidad_ingresada == "":
+                        print("Error: la cantidad de asiento no puede ser vacio")
+                    else:
+                        try:
+                            cantidad_ingresada = int(cantidad_ingresada)
+                        except:
+                            print("Error: el número de asientos debe ser un valor númerico")
+                    if cantidad_ingresada == -1:
+                        return menu_gestion_modelos()
+                    elif cantidad_ingresada <= 0:
+                        print("Error: la cantidad de asientos no puede menor a 0")
+                    else:
+                        asiento_valido = True
+                asientos_clase_turista = cantidad_ingresada
+
+                asiento_valido = False
+                while not asiento_valido:
+                    cantidad_ingresada = input("Ingrese la cantidad de asiento para la clase economica (o -1 para salir): ")
+                    if cantidad_ingresada == "":
+                        print("Error: la cantidad de asiento no puede ser vacio")
+                    else:
+                        try:
+                            cantidad_ingresada = int(cantidad_ingresada)
+                        except:
+                            print("Error: el número de asientos debe ser un valor númerico")
+                    if cantidad_ingresada == -1:
+                        return menu_gestion_modelos()
+                    elif cantidad_ingresada <= 0:
+                        print("Error: la cantidad de asientos no puede menor a 0")
+                    else:
+                        asiento_valido = True
+                        
+                asientos_clase_economica = cantidad_ingresada
+
+                with open(ruta_archivo_modelos, "a", encoding="utf-8") as archivo:
+                    archivo.write(f"{modelo_ingresado.strip()};{marca_seleccionada};{asientos_clase_ejecutiva};{asientos_clase_turista};{asientos_clase_economica}\n")
+                print(f"\nNombre del modelo: {modelo_ingresado.strip()}\nNombre de la marca: {marca_seleccionada}\nCantidad asientos clase ejecutiva: {asientos_clase_ejecutiva}\nCantidad asientos clase turista: {asientos_clase_turista}\nCantidad asientos clase economica: {asientos_clase_economica}\nNuevo modelo agregado existosamente")
+                modelo_valido = True
+                return menu_gestion_modelos()
+        else:
+            print("Error: el nombre del modelo ingresado no puede ser vacio")
+
