@@ -1,0 +1,4 @@
+N101;Airbus;A320;2020;Copa
+N102;Airbus;A320;2021;Copa
+XC301;Boeing;737;2019;Avianca
+LT501;Embraer;E190;2022;LATAM
