@@ -1,3 +1,7 @@
+from validadores import validar_nombre, existe_marca, existe_marca_asociada
+from acceso_datos import cargar_usuarios
+from vistas import mostrar_marcas
+
 def menu_principal():
     print("Bienvenido al sistema de reservación de vuelos")
     while True:
@@ -5,7 +9,6 @@ def menu_principal():
         print("(1) Opciones administrativas")
         print("(2) Opciones de Usuario")
         print("(3) Salir")
-
         opcion_ingresada = input("Ingresa una opción: ")
         if opcion_ingresada != "":
             try:
@@ -48,15 +51,6 @@ def control_acceso():
                     return menu_principal()
                 else:
                     print("Error: La contraseña es incorrecta")
-        
-def cargar_usuarios():
-    ruta_archivo = "archivos/acceso.txt"
-    try:
-        with open(ruta_archivo, 'r', encoding='utf-8') as archivo:
-            contenido = archivo.readlines()
-        return contenido
-    except:
-        print("Error: el archivo acceso.txt no existe")
 
 
 def menu_administrador():
@@ -80,7 +74,7 @@ def menu_administrador():
         if opcion_ingresada == 1:
             return menu_gestion_marcas()
         elif opcion_ingresada == 2:
-            "menu_gestion_modelos()"
+            return menu_gestion_modelos()
         elif opcion_ingresada == 3:
             "menu_gestion_aerolineas()"
         elif opcion_ingresada == 4:
@@ -125,38 +119,6 @@ def menu_gestion_marcas():
             print("Error: la opción ingresada no existe\n")
 
 
-def cargar_marcas():
-    ruta_archivo = "archivos/aviones.txt"
-    try:
-        with open(ruta_archivo, 'r', encoding='utf-8') as archivo:
-            contenido = archivo.readlines()
-        return contenido
-    except:
-        print("Error: el archivo aviones.txt no existe")
-
-def existe_marca(marca_ingresada):
-    marcas_cargadas = cargar_marcas()
-    if not marcas_cargadas:
-        return False
-    else:
-        for marcas in marcas_cargadas:
-            marca = marcas.strip()
-            if marca_ingresada == marca:
-                return True
-        return False
-    
-def existe_marca_asociada(marca_ingresada):
-    modelos_cargados = cargar_modelos()
-    if not modelos_cargados:
-        return False
-    else:
-        for modelos in modelos_cargados:
-            marca = modelos.strip().split(";")[1]
-            if marca_ingresada == marca:
-                return True
-        return False
-
-    
 def incluir_marca():
     ruta_archivo = "archivos/aviones.txt"
     marca_valida = False
@@ -165,6 +127,8 @@ def incluir_marca():
         if marca_ingresada != "":
             if existe_marca(marca_ingresada):
                 print("Error: esta marca ya existe")
+            elif not validar_nombre(marca_ingresada):
+                print("Error: el nombre no puede ser solo números")
             else:
                 with open(ruta_archivo, "a", encoding="utf-8") as archivo:
                     archivo.write(marca_ingresada + "\n")
@@ -247,6 +211,8 @@ def modificar_marca():
         if marca_ingresada != "":
             if existe_marca(marca_ingresada):
                 print("Error: esta marca ya existe")
+            elif not validar_nombre(marca_ingresada):
+                print("Error: el nombre no puede ser solo números")
             else:
                 contenido_anterior[indice_ingresado-1] = marca_ingresada
                 with open(ruta_archivo, "w", encoding="utf-8") as archivo:
@@ -257,32 +223,3 @@ def modificar_marca():
                 marca_valida = True
 
     return menu_gestion_marcas()
-
-def mostrar_marcas():
-    ruta_archivo = "archivos/aviones.txt"
-    try:
-        with open(ruta_archivo, 'r', encoding='utf-8') as archivo:
-            contenido = archivo.readlines()
-        print("Marcas disponibles:")
-        i = 1
-        for marcas in contenido:
-            marca = marcas.strip()
-            print(f"{i}:{marca}")
-            i+=1
-    except:
-        print("Error: el archivo aviones.txt no existe")
-
-                
-def cargar_modelos():
-    ruta_archivo = "archivos/modeloAviones.txt"
-    try:
-        with open(ruta_archivo, 'r', encoding='utf-8') as archivo:
-            contenido = archivo.readlines()
-        return contenido
-    except:
-        print("Error: el archivo modeloAviones.txt no existe")
-
-menu_principal()
-
-
-        
