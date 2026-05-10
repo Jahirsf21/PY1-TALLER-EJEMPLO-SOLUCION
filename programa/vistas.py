@@ -3,7 +3,7 @@ def mostrar_marcas():
     try:
         with open(ruta_archivo, 'r', encoding='utf-8') as archivo:
             contenido = archivo.readlines()
-        print("Marcas disponibles:")
+        print("\nMarcas disponibles:")
         i = 1
         for marcas in contenido:
             marca = marcas.strip()
@@ -17,7 +17,7 @@ def mostrar_modelos():
     try:
         with open(ruta_archivo, 'r', encoding='utf-8') as archivo:
             contenido = archivo.readlines()
-        print("Modelos disponibles:")
+        print("\nModelos disponibles:")
         i = 1
         for modelos in contenido:
             modelo = modelos.strip().split(";")[0]
