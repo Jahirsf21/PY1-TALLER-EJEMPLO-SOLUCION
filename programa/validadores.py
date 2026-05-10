@@ -58,7 +58,36 @@ def validar_nombre_modelo(nombre):
         return False
     else:
         return True
+    
+def validar_nombre_aerolinea(nombre):
+    contador_digitos = 0
+    contador_letras = 0
+    for caracter in nombre:
+        if caracter.isdigit():
+            contador_digitos += 1
+        else:
+            contador_letras += 1
+    if len(nombre) == contador_digitos:
+        return False
+    elif len(nombre) == 1:
+        return False
+    else:
+        return True    
 
+def validar_nombre_centro_operaciones(nombre):
+    contador_digitos = 0
+    contador_letras = 0
+    for caracter in nombre:
+        if caracter.isdigit():
+            contador_digitos += 1
+        else:
+            contador_letras += 1
+    if len(nombre) == contador_digitos:
+        return False
+    elif len(nombre) == 1:
+        return False
+    else:
+        return True    
         
 def existe_marca(marca_ingresada):
     marcas_cargadas = cargar_marcas()
@@ -101,5 +130,27 @@ def existe_modelo_asociado(modelo_ingresado):
         for aviones in aviones_cargados:
             modelo = aviones.strip().split(";")[2]
             if modelo_ingresado.strip() == modelo:
+                return True
+        return False
+    
+def existe_aerolinea(aerolinea_ingresada):
+    aerolineas_cargadas = cargar_aerolineas()
+    if not aerolineas_cargadas:
+        return  False
+    else:
+        for aerolineas in aerolineas_cargadas:
+            aerolinea = aerolineas.strip().split(";")[0]
+            if aerolinea_ingresada.strip() == aerolinea:
+                return True
+        return False
+            
+def existe_aerolinea_asociada(aerolinea_ingresada):
+    aviones_cargados = cargar_aviones()
+    if not aviones_cargados:
+        return False
+    else:
+        for aviones in aviones_cargados:
+            aerolinea = aviones.strip().split(";")[4]
+            if aerolinea_ingresada.strip() == aerolinea:
                 return True
         return False
