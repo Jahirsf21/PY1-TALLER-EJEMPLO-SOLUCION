@@ -1,7 +1,5 @@
 from validadores import *
 from acceso_datos import *
-from acceso_datos import *
-from acceso_datos import *
 from vistas import *
 
 def menu_principal():
@@ -17,16 +15,18 @@ def menu_principal():
                 opcion_ingresada = int(opcion_ingresada)
             except:
                 print("Error: la opción debe ser un número\n")
-        if opcion_ingresada == 1:
-            if control_acceso() == 1:
-                return menu_administrador()
-        elif opcion_ingresada == 2:
-            "menu_usuario()"
-        elif opcion_ingresada == 3:
-            exit()
+                continue
+            if opcion_ingresada == 1:
+                if control_acceso() == 1:
+                    return menu_administrador()
+            elif opcion_ingresada == 2:
+                "menu_usuario()"
+            elif opcion_ingresada == 3:
+                exit()
+            else:
+                print("Error: la opción ingresada no existe\n")
         else:
-            print("Error: la opción ingresada no existe\n")
-
+            print("Error: la opción ingresada no puede ser vacio")   
 
 def menu_administrador():
     print("\n    Panel de administrador")
@@ -46,24 +46,27 @@ def menu_administrador():
                 opcion_ingresada = int(opcion_ingresada)
             except:
                 print("Error: la opción debe ser un número\n")
-        if opcion_ingresada == 1:
-            return menu_gestion_marcas()
-        elif opcion_ingresada == 2:
-            return menu_gestion_modelos()
-        elif opcion_ingresada == 3:
-            "menu_gestion_aerolineas()"
-        elif opcion_ingresada == 4:
-            "menu_gestion_aviones_aerolineas()"
-        elif opcion_ingresada == 5:
-            "menu_gestion_vuelos()"
-        elif opcion_ingresada == 6:
-            "estadisticas_vuelos()"
-        elif opcion_ingresada == 7:
-            "historial_reservaciones()"
-        elif opcion_ingresada == 8: 
-            return menu_principal()
+                continue
+            if opcion_ingresada == 1:
+                return menu_gestion_marcas()
+            elif opcion_ingresada == 2:
+                return menu_gestion_modelos()
+            elif opcion_ingresada == 3:
+                "menu_gestion_aerolineas()"
+            elif opcion_ingresada == 4:
+                "menu_gestion_aviones_aerolineas()"
+            elif opcion_ingresada == 5:
+                "menu_gestion_vuelos()"
+            elif opcion_ingresada == 6:
+                "estadisticas_vuelos()"
+            elif opcion_ingresada == 7:
+                "historial_reservaciones()"
+            elif opcion_ingresada == 8: 
+                return menu_principal()
+            else:
+                print("Error: la opción ingresada no existe\n")
         else:
-            print("Error: la opción ingresada no existe\n")
+            print("Error: la opción ingresada no puede ser vacio")
 
 def menu_gestion_marcas():
     print("\nPanel de administrador - gestión marcas")
@@ -81,27 +84,30 @@ def menu_gestion_marcas():
                 opcion_ingresada = int(opcion_ingresada)
             except:
                 print("Error: la opción debe ser un número\n")
-        if opcion_ingresada == 1:
-            return incluir_marca()
-        elif opcion_ingresada == 2:
-            if not marcas:
-                print("Error: No se pueden eliminar marcas ya que no hay marcas registradas")
+                continue
+            if opcion_ingresada == 1:
+                return incluir_marca()
+            elif opcion_ingresada == 2:
+                if not marcas:
+                    print("Error: No se pueden eliminar marcas ya que no hay marcas registradas")
+                else:
+                    return eliminar_marca()
+            elif opcion_ingresada == 3:
+                if not marcas:
+                    print("Error: No se pueden modificar marcas ya que no hay marcas registradas")
+                else:
+                    return modificar_marca()
+            elif opcion_ingresada == 4:
+                if not marcas:
+                    print("Error: No hay marcas registradas para mostrar")
+                else:
+                    mostrar_marcas()
+            elif opcion_ingresada == 5: 
+                return menu_administrador()
             else:
-                return eliminar_marca()
-        elif opcion_ingresada == 3:
-            if not marcas:
-                print("Error: No se pueden modificar marcas ya que no hay marcas registradas")
-            else:
-                return modificar_marca()
-        elif opcion_ingresada == 4:
-            if not marcas:
-                print("Error: No hay marcas registradas para mostrar")
-            else:
-                mostrar_marcas()
-        elif opcion_ingresada == 5: 
-            return menu_administrador()
+                print("Error: la opción ingresada no existe\n")
         else:
-            print("Error: la opción ingresada no existe\n")
+            print("Error: la opción ingresada no puede ser vacio")
 
 
 def incluir_marca():
@@ -111,6 +117,8 @@ def incluir_marca():
         if marca_ingresada != "":
             if existe_marca(marca_ingresada):
                 print("Error: esta marca ya existe")
+            elif marca_ingresada == "s":
+                return menu_gestion_marcas()
             elif not validar_nombre_marca(marca_ingresada):
                 print("Error: el nombre de la marca no puede ser solo números o de un solo caracter")
             else:
@@ -130,21 +138,22 @@ def eliminar_marca():
     indice_valido = False
     while not indice_valido:
         indice_ingresado = input("Ingrese el número de opción de la marca que desea eliminar (o 0 para salir): ")
-        if indice_ingresado == "":
-            print("Error: el número de opción no puede ser vacio")
-        else:
+        if indice_ingresado != "":
             try:
                 indice_ingresado = int(indice_ingresado)
             except:
                 print("Error: el número de opción debe ser un valor númerico")
-        if indice_ingresado < 0 or indice_ingresado > len(contenido_anterior):
-            print("Error: la opción ingresada no existe")
-        elif indice_ingresado == 0:
-            return menu_gestion_marcas()
-        elif existe_marca_asociada(contenido_anterior[indice_ingresado-1]):
-            print("Error: no se puede eliminar ya que esta asociado a un modelo")
+                continue
+            if indice_ingresado < 0 or indice_ingresado > len(contenido_anterior):
+                print("Error: la opción ingresada no existe")
+            elif indice_ingresado == 0:
+                return menu_gestion_marcas()
+            elif existe_marca_asociada(contenido_anterior[indice_ingresado-1]):
+                print("Error: no se puede eliminar ya que esta asociado a un modelo")
+            else:
+                indice_valido = True
         else:
-            indice_valido = True
+            print("Error: la opción ingresada no puede ser vacio")
 
     contenido_nuevo = contenido_anterior[:indice_ingresado-1] + contenido_anterior[indice_ingresado:]
     reescribir_marcas(contenido_nuevo)
@@ -155,23 +164,23 @@ def eliminar_marca():
 def modificar_marca():
     mostrar_marcas()
     contenido_anterior = cargar_marcas()
-    print(len(contenido_anterior))
     indice_valido = False
     while not indice_valido:
         indice_ingresado = input("Ingrese el número de opción de la marca que desea editar (0 para salir): ")
-        if indice_ingresado == "":
-            print("Error: El número de opción no puede ser vacio")
-        else:
+        if indice_ingresado !="":
             try:
                 indice_ingresado = int(indice_ingresado)
             except:
                 print("Error: el número de opción debe ser un valor númerico")
-        if indice_ingresado < 0 or indice_ingresado > len(contenido_anterior):
-            print("Error: la opcion ingresada no existe")
-        elif indice_ingresado == 0:
-            return menu_gestion_marcas()
+                continue
+            if indice_ingresado < 0 or indice_ingresado > len(contenido_anterior):
+                print("Error: la opcion ingresada no existe")
+            elif indice_ingresado == 0:
+                return menu_gestion_marcas()
+            else:
+                indice_valido = True
         else:
-            indice_valido = True
+            print("Error: el número de opción no puede ser vacio")
     
     marca_valida = False
     while not marca_valida:
@@ -183,6 +192,8 @@ def modificar_marca():
                 print("Error: el nombre de la marca no puede ser solo números o de un solo caracter")
             else:
                 marca_valida = True
+        else:
+            print("Error: el nombre de la marca ingresada no puede ser vacio")
 
     contenido_anterior[indice_ingresado-1] = marca_ingresada.strip()
     reescribir_marcas(contenido_anterior)
@@ -207,24 +218,27 @@ def menu_gestion_modelos():
                 opcion_ingresada = int(opcion_ingresada)
             except:
                 print("Error: la opción debe ser un número\n")
-        if opcion_ingresada == 1:
-            if not marcas:
-                print("Error: no se pueden crear modelos ya que no hay marcas registradas")
+                continue
+            if opcion_ingresada == 1:
+                if not marcas:
+                    print("Error: no se pueden crear modelos ya que no hay marcas registradas")
+                else:
+                    return incluir_modelo()
+            elif opcion_ingresada == 2:
+                if not modelos:
+                    print("Error: no hay modelos registrados")
+                else:
+                    "return eliminar_modelo())"
+            elif opcion_ingresada == 3:
+                "modificar_marca()"
+            elif opcion_ingresada == 4:
+                "mostrar_marcas()"
+            elif opcion_ingresada == 5: 
+                return menu_administrador()
             else:
-                return incluir_modelo()
-        elif opcion_ingresada == 2:
-            if not modelos:
-                print("Error: no hay modelos registrados")
-            else:
-                "return eliminar_modelo())"
-        elif opcion_ingresada == 3:
-            "modificar_marca()"
-        elif opcion_ingresada == 4:
-            "mostrar_marcas()"
-        elif opcion_ingresada == 5: 
-            return menu_administrador()
+                print("Error: la opción ingresada no existe\n")
         else:
-            print("Error: la opción ingresada no existe\n")
+            print("Error: el número de opción no puede ser vacio")
 
 def incluir_modelo():
     modelo_valido = False
@@ -248,73 +262,77 @@ def incluir_modelo():
 
     while not indice_valido:
         indice_ingresado = input("Ingrese el número de opcion de la marca que desea usar (0 s para salir): ")
-        if indice_ingresado == "":
-            print("Error: El número de opción no puede ser vacio")
-        else:
+        if indice_ingresado !="":
             try:
                 indice_ingresado = int(indice_ingresado)
             except:
                 print("Error: el número de opción debe ser un valor númerico")
-        if indice_ingresado < 0 or indice_ingresado > len(contenido_marcas):
-            print("Error: la opcion ingresada no existe")
-        elif indice_ingresado == 0:
-            return menu_gestion_modelos()
+                continue
+            if indice_ingresado < 0 or indice_ingresado > len(contenido_marcas):
+                print("Error: la opcion ingresada no existe")
+            elif indice_ingresado == 0:
+                return menu_gestion_modelos()
+            else:
+                indice_valido = True
+                marca_seleccionada = contenido_marcas[indice_ingresado-1]
         else:
-            indice_valido = True
-            marca_seleccionada = contenido_marcas[indice_ingresado-1]
+            print("Error: el número de opción no puede ser vacio")
 
     asiento_valido = False
     while not asiento_valido:
-        cantidad_ingresada = input("Ingrese la cantidad de asiento para la clase ejecutiva (o -1 para salir): ")
-        if cantidad_ingresada == "":
-            print("Error: la cantidad de asiento no puede ser vacio")
-        else:
+        cantidad_ingresada = input("Ingrese la cantidad de asientos para la clase ejecutiva (o -1 para salir): ")
+        if cantidad_ingresada != "":
             try:
                 cantidad_ingresada = int(cantidad_ingresada)
             except:
                 print("Error: el número de asientos debe ser un valor númerico")
-        if cantidad_ingresada == -1:
-            return menu_gestion_modelos()
-        elif cantidad_ingresada <= 0:
-            print("Error: la cantidad de asientos no puede menor a 0")
+                continue
+            if cantidad_ingresada == -1:
+                return menu_gestion_modelos()
+            elif cantidad_ingresada <= 0:
+                print("Error: la cantidad de asientos no puede menor a 0")
+            else:
+                asiento_valido = True
         else:
-            asiento_valido = True
+            print("Error: la cantidad de asientos no puede ser vacio")
     asientos_clase_ejecutiva = cantidad_ingresada
 
     asiento_valido = False
     while not asiento_valido:
-        cantidad_ingresada = input("Ingrese la cantidad de asiento para la clase turista (o -1 para salir): ")
-        if cantidad_ingresada == "":
-            print("Error: la cantidad de asiento no puede ser vacio")
-        else:
+        cantidad_ingresada = input("Ingrese la cantidad de asientos para la clase turista (o -1 para salir): ")
+        if cantidad_ingresada != "":
             try:
                 cantidad_ingresada = int(cantidad_ingresada)
             except:
                 print("Error: el número de asientos debe ser un valor númerico")
-        if cantidad_ingresada == -1:
-            return menu_gestion_modelos()
-        elif cantidad_ingresada <= 0:
-            print("Error: la cantidad de asientos no puede menor a 0")
+                continue
+            if cantidad_ingresada == -1:
+                return menu_gestion_modelos()
+            elif cantidad_ingresada <= 0:
+                print("Error: la cantidad de asientos no puede menor a 0")
+            else:
+                asiento_valido = True
         else:
-            asiento_valido = True
+            print("Error: la cantidad de asientos no puede ser vacio")
     asientos_clase_turista = cantidad_ingresada
 
     asiento_valido = False
     while not asiento_valido:
-        cantidad_ingresada = input("Ingrese la cantidad de asiento para la clase economica (o -1 para salir): ")
-        if cantidad_ingresada == "":
-            print("Error: la cantidad de asiento no puede ser vacio")
-        else:
+        cantidad_ingresada = input("Ingrese la cantidad de asientos para la clase economica (o -1 para salir): ")
+        if cantidad_ingresada != "":
             try:
                 cantidad_ingresada = int(cantidad_ingresada)
             except:
                 print("Error: el número de asientos debe ser un valor númerico")
-        if cantidad_ingresada == -1:
-            return menu_gestion_modelos()
-        elif cantidad_ingresada <= 0:
-            print("Error: la cantidad de asientos no puede menor a 0")
+                continue
+            if cantidad_ingresada == -1:
+                return menu_gestion_modelos()
+            elif cantidad_ingresada <= 0:
+                print("Error: la cantidad de asientos no puede menor a 0")
+            else:
+                asiento_valido = True
         else:
-            asiento_valido = True
+            print("Error: la cantidad de asientos no puede ser vacio")
 
     asientos_clase_economica = cantidad_ingresada
     guardar_modelo(modelo_ingresado.strip(),marca_seleccionada,asientos_clase_ejecutiva,asientos_clase_turista,asientos_clase_economica)
@@ -329,21 +347,22 @@ def eliminar_modelo():
     indice_valido = False
     while not indice_valido:
         indice_ingresado = input("Ingrese el número de opción del modelo que desea eliminar (o 0 para salir): ")
-        if indice_ingresado == "":
-            print("Error: el número de opción no puede ser vacio")
-        else:
+        if indice_ingresado != "":
             try:
                 indice_ingresado = int(indice_ingresado)
             except:
                 print("Error: el número de opción debe ser un valor númerico")
-        if indice_ingresado < 0 or indice_ingresado > len(contenido_anterior):
-            print("Error: la opcion ingresada no existe")
-        elif indice_ingresado == 0:
-            return menu_gestion_modelos()
-        elif existe_modelo_asociado((contenido_anterior[indice_ingresado-1]).split(";")[0]):
-            print("Error: no se puede eliminar ya que esta asociado a un avion")
+                continue
+            if indice_ingresado < 0 or indice_ingresado > len(contenido_anterior):
+                print("Error: la opcion ingresada no existe")
+            elif indice_ingresado == 0:
+                return menu_gestion_modelos()
+            elif existe_modelo_asociado((contenido_anterior[indice_ingresado-1]).split(";")[0]):
+                print("Error: no se puede eliminar ya que esta asociado a un avion")
+            else:
+                indice_valido = True
         else:
-            indice_valido = True
+            print("Error: el número de opción no puede ser vacio")
 
     contenido_nuevo = contenido_anterior[:indice_ingresado-1] + contenido_anterior[indice_ingresado:]
     reescribir_modelos(contenido_nuevo)
