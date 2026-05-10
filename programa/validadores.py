@@ -87,8 +87,23 @@ def validar_nombre_centro_operaciones(nombre):
     elif len(nombre) == 1:
         return False
     else:
-        return True    
-        
+        return True   
+    
+def validar_matricula(matricula):
+    contador_digitos = 0
+    contador_letras = 0
+    for caracter in matricula:
+        if caracter.isdigit():
+            contador_digitos += 1
+        else:
+            contador_letras += 1
+    if len(matricula) == contador_digitos:
+        return False
+    elif len(matricula) == 1:
+        return False
+    else:
+        return True   
+
 def existe_marca(marca_ingresada):
     marcas_cargadas = cargar_marcas()
     if not marcas_cargadas:
@@ -154,3 +169,30 @@ def existe_aerolinea_asociada(aerolinea_ingresada):
             if aerolinea_ingresada.strip() == aerolinea:
                 return True
         return False
+    
+def existe_avion(avion_ingresado):
+    aviones_cargados = cargar_aviones()
+    if not aviones_cargados:
+        return False
+    else:
+        for aviones in aviones_cargados:
+            matricula = aviones.strip().split(";")[0]
+            if avion_ingresado.strip() == matricula:
+                return True
+        return False
+
+def existe_avion_asociado(avion_ingresado):
+    vuelos_cargados = cargar_vuelos()
+    if not vuelos_cargados:
+        return False
+    else:
+        for vuelos in vuelos_cargados:
+            avion = vuelos.strip().split(";")[8]
+            if avion_ingresado.strip() == avion:
+                return True
+        return False
+    
+
+
+    
+

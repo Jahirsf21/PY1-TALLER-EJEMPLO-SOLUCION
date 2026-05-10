@@ -106,3 +106,12 @@ def cargar_aviones():
         print("Error: el archivo avionesAerolineas.txt no existe")
 
 
+def cargar_vuelos():
+    ruta_archivo = "archivos/vuelos.txt"
+    try:
+        with open(ruta_archivo, "r", encoding="utf-8") as archivo:
+            contenido = archivo.readlines()
+        contenido = limpiar_contenido(contenido)
+        return contenido
+    except:
+        print("Error: el archivo avionesAerolineas.txt no existe")
