@@ -95,6 +95,7 @@ def cargar_usuarios():
     except:
         print("Error: el archivo acceso.txt no existe")
 
+
 def cargar_aviones():
     ruta_archivo = "archivos/avionesAerolineas.txt"
     try:
@@ -105,6 +106,22 @@ def cargar_aviones():
     except:
         print("Error: el archivo avionesAerolineas.txt no existe")
 
+def guardar_avion(matricula, marca, modelo, año, aerolinea):
+    ruta_archivo = "archivos/avionesAerolineas.txt"
+    try:
+        with open(ruta_archivo, "a", encoding="utf-8") as archivo:
+            archivo.write(f"{matricula};{marca};{modelo};{año};{aerolinea}\n")
+    except:
+        print("Error: el archivo avionesAerolineas.txt no existe")
+
+def reescribir_aviones(contenido):
+    ruta_archivo = "archivos/avionesAerolineas.txt"
+    try:
+        with open(ruta_archivo, "w", encoding="utf-8") as archivo:
+            for avion in contenido:
+                archivo.write(avion + "\n")
+    except:
+        print("Error: el archivo avionesAerolineas no existe")
 
 def cargar_vuelos():
     ruta_archivo = "archivos/vuelos.txt"

@@ -90,19 +90,12 @@ def validar_nombre_centro_operaciones(nombre):
         return True   
     
 def validar_matricula(matricula):
-    contador_digitos = 0
-    contador_letras = 0
+    if len(matricula) <= 1:
+        return False
     for caracter in matricula:
-        if caracter.isdigit():
-            contador_digitos += 1
-        else:
-            contador_letras += 1
-    if len(matricula) == contador_digitos:
-        return False
-    elif len(matricula) == 1:
-        return False
-    else:
-        return True   
+        if not caracter.isdigit() and not caracter.isalpha():
+            return False  
+    return True 
 
 def existe_marca(marca_ingresada):
     marcas_cargadas = cargar_marcas()
@@ -191,8 +184,3 @@ def existe_avion_asociado(avion_ingresado):
             if avion_ingresado.strip() == avion:
                 return True
         return False
-    
-
-
-    
-

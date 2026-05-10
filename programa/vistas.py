@@ -1,3 +1,5 @@
+from acceso_datos import *
+
 def mostrar_marcas():
     ruta_archivo = "archivos/aviones.txt"
     try:
@@ -30,6 +32,20 @@ def mostrar_modelos():
     except:
         print("Error: el archivo modeloAviones.txt no existe")
 
+def mostrar_modelos_marcas(marca):
+    modelos_cargados = cargar_modelos()
+    resultado = []
+    for modelo in modelos_cargados:
+        if modelo.strip().split(";")[1] == marca:
+            resultado += [modelo]
+    i = 1
+    print("\nModelos disponibles para la marca seleccionada: ")
+    for modelo in resultado:
+        nombre = modelo.strip().split(";")[0]
+        print(f"{i}: Nombre modelo: {nombre}")
+        i += 1
+    return resultado
+
 def mostrar_aerolineas():
     ruta_archivo = "archivos/aerolineas.txt"
     try:
@@ -39,9 +55,28 @@ def mostrar_aerolineas():
         i = 1
         for aerolineas in contenido:
             aerolinea = aerolineas.strip().split(";")[0]
-            centro_operaciones = aerolineas.strip().split(";")[1]
-            print(f"{i}: Nombre aerolinéa: {aerolinea} Centro de operaciones en: {centro_operaciones}")
+            print(f"{i}: Nombre aerolinéa: {aerolinea}")
             i+=1
     except:
         print("Error: el archivo aerolineas.txt no existe")
 
+
+def mostrar_aviones():
+    ruta_archivo = "archivos/avionesAerolineas.txt"
+    try:
+        with open(ruta_archivo, 'r', encoding='utf-8') as archivo:
+            contenido = archivo.readlines()
+        print("\nAviones disponibles:")
+        i = 1
+        for aviones in contenido:
+            matricula = aviones.strip().split(";")[0]
+            marca = aviones.strip().split(";")[1]
+            modelo = aviones.strip().split(";")[2]
+            año = aviones.strip().split(";")[3]
+            aerolinea = aviones.strip().split(";")[4]
+            print(f"{i}: Matricula avion: {matricula} Marca: {marca} Modelo: {modelo} Año: {año} Aerolinea: {aerolinea}")
+            i+=1
+    except:
+        print("Error: el archivo avionesAerolineas.txt no existe")
+
+    
