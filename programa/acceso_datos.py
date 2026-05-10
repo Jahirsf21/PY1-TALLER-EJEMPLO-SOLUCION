@@ -5,15 +5,21 @@ def limpiar_contenido(contenido):
     return resultado
 
 def guardar_marca(contenido):
-    ruta_archivo = "archivos/aviones.txt"
-    with open(ruta_archivo, "a", encoding="utf-8") as archivo:
-        archivo.write(contenido.strip() + "\n")
+    try:
+        ruta_archivo = "archivos/aviones.txt"
+        with open(ruta_archivo, "a", encoding="utf-8") as archivo:
+            archivo.write(contenido.strip() + "\n")
+    except:
+        print("Error: el archivo aviones.txt no existe")
 
 def reescribir_marcas(contenido):
-    ruta_archivo = "archivos/aviones.txt"
-    with open(ruta_archivo, "w", encoding="utf-8") as archivo:
-        for marca in contenido:
-            archivo.write(marca + "\n")
+    try:
+        ruta_archivo = "archivos/aviones.txt"
+        with open(ruta_archivo, "w", encoding="utf-8") as archivo:
+            for marca in contenido:
+                archivo.write(marca + "\n")
+    except:
+        print("Error: el archivo aviones.txt no existe")
 
 def cargar_marcas():
     ruta_archivo = "archivos/aviones.txt"
@@ -26,15 +32,21 @@ def cargar_marcas():
         print("Error: el archivo aviones.txt no existe")
 
 def guardar_modelo(modelo,marca,asientos_ejecutiva,asientos_turista,asientos_economica):
-    ruta_archivo = "archivos/modeloAviones.txt"
-    with open(ruta_archivo, "a", encoding="utf-8") as archivo:
-        archivo.write(f"{modelo};{marca};{asientos_ejecutiva};{asientos_turista};{asientos_economica}\n")
+    try:
+        ruta_archivo = "archivos/modeloAviones.txt"
+        with open(ruta_archivo, "a", encoding="utf-8") as archivo:
+            archivo.write(f"{modelo};{marca};{asientos_ejecutiva};{asientos_turista};{asientos_economica}\n")
+    except:
+        print("Error: el archivo modeloAviones.txt no existe")
 
 def reescribir_modelos(contenido):
     ruta_archivo = "archivos/modeloAviones.txt"
-    with open(ruta_archivo, "w", encoding="utf-8") as archivo:
-        for modelo in contenido:
-            archivo.write(modelo + "\n")
+    try:
+        with open(ruta_archivo, "w", encoding="utf-8") as archivo:
+            for modelo in contenido:
+                archivo.write(modelo + "\n")
+    except:
+        print("Error: el archivo modeloAviones.txt no existe")
 
 def cargar_modelos():
     ruta_archivo = "archivos/modeloAviones.txt"
