@@ -52,7 +52,7 @@ def menu_administrador():
             elif opcion_ingresada == 2:
                 menu_gestion_modelos()
             elif opcion_ingresada == 3:
-                "menu_gestion_aerolineas()"
+                menu_gestion_aerolineas()
             elif opcion_ingresada == 4:
                 "menu_gestion_aviones_aerolineas()"
             elif opcion_ingresada == 5:
@@ -135,7 +135,7 @@ def eliminar_marca():
     contenido_anterior = cargar_marcas()
     indice_valido = False
     while not indice_valido:
-        indice_ingresado = input("Ingrese el número de opción de la marca que desea eliminar (o 0 regresar): ")
+        indice_ingresado = input("Ingrese el número de opción de la marca que desea eliminar (o 0 para regresar): ")
         if indice_ingresado != "":
             try:
                 indice_ingresado = int(indice_ingresado)
@@ -155,6 +155,7 @@ def eliminar_marca():
 
     contenido_nuevo = contenido_anterior[:indice_ingresado-1] + contenido_anterior[indice_ingresado:]
     reescribir_marcas(contenido_nuevo)
+    print("Marca eliminada exitosamente")
     mostrar_marcas()
     return 
         
@@ -270,7 +271,7 @@ def incluir_modelo():
     indice_valido = False
 
     while not indice_valido:
-        indice_ingresado = input("Ingrese el número de opcion de la marca que desea usar (0 s regresar): ")
+        indice_ingresado = input("Ingrese el número de opcion de la marca que desea usar ( o 0 para regresar): ")
         if indice_ingresado !="":
             try:
                 indice_ingresado = int(indice_ingresado)
@@ -289,7 +290,7 @@ def incluir_modelo():
 
     asiento_valido = False
     while not asiento_valido:
-        cantidad_ingresada = input("Ingrese la cantidad de asientos para la clase ejecutiva (o -1 regresar): ")
+        cantidad_ingresada = input("Ingrese la cantidad de asientos para la clase ejecutiva (o -1 para regresar): ")
         if cantidad_ingresada != "":
             try:
                 cantidad_ingresada = int(cantidad_ingresada)
@@ -308,7 +309,7 @@ def incluir_modelo():
 
     asiento_valido = False
     while not asiento_valido:
-        cantidad_ingresada = input("Ingrese la cantidad de asientos para la clase turista (o -1 regresar): ")
+        cantidad_ingresada = input("Ingrese la cantidad de asientos para la clase turista (o -1 para regresar): ")
         if cantidad_ingresada != "":
             try:
                 cantidad_ingresada = int(cantidad_ingresada)
@@ -327,7 +328,7 @@ def incluir_modelo():
 
     asiento_valido = False
     while not asiento_valido:
-        cantidad_ingresada = input("Ingrese la cantidad de asientos para la clase economica (o -1 regresar): ")
+        cantidad_ingresada = input("Ingrese la cantidad de asientos para la clase economica (o -1 para regresar): ")
         if cantidad_ingresada != "":
             try:
                 cantidad_ingresada = int(cantidad_ingresada)
@@ -355,7 +356,7 @@ def eliminar_modelo():
     contenido_anterior = cargar_modelos()
     indice_valido = False
     while not indice_valido:
-        indice_ingresado = input("Ingrese el número de opción del modelo que desea eliminar (o 0 regresar): ")
+        indice_ingresado = input("Ingrese el número de opción del modelo que desea eliminar (o 0 para regresar): ")
         if indice_ingresado != "":
             try:
                 indice_ingresado = int(indice_ingresado)
@@ -384,7 +385,7 @@ def modificar_modelo():
     contenido_anterior = cargar_modelos()
     indice_valido = False
     while not indice_valido:
-        indice_ingresado = input("Ingrese el número de opción del modelo que desea modificar (o 0 regresar): ")
+        indice_ingresado = input("Ingrese el número de opción del modelo que desea modificar (o 0 para regresar): ")
         if indice_ingresado != "":
             try:
                 indice_ingresado = int(indice_ingresado)
@@ -552,8 +553,177 @@ def modificar_modelo_asientos(modelo_seleccionado, contenido_anterior, indice_se
     datos_modelo[3] = asientos_clase_turista
     datos_modelo[4] = asientos_clase_economica
     contenido_anterior[indice_seleccionado] = f"{datos_modelo[0]};{datos_modelo[1]};{datos_modelo[2]};{datos_modelo[3]};{datos_modelo[4]}"
-    print(f"Cantidad de asientos actualizada exitosamente")
     reescribir_modelos(contenido_anterior)
+    print(f"Cantidad de asientos actualizada exitosamente")
     return modificar_modelo_aux(contenido_anterior[indice_seleccionado].split(";"), contenido_anterior, indice_seleccionado)
 
-menu_principal()
+def menu_gestion_aerolineas():
+    while True:
+        print("\nPanel de administrador - gestión marcas")
+        print("====== Opciones disponibles ======")
+        print("(1) Incluir aerolínea")
+        print("(2) Eliminar aerolínea")
+        print("(3) Modificar aerolínea")
+        print("(4) Mostrar aerolíneas")
+        print("(5) Regresar al menú principal")
+        opcion_ingresada = input("Ingresa una opción: ")
+        aerolineas = cargar_aerolineas()
+        if opcion_ingresada != "":
+            try:
+                opcion_ingresada = int(opcion_ingresada)
+            except:
+                print("Error: la opción debe ser un número\n")
+                continue
+            if opcion_ingresada == 1:
+                incluir_aerolinea()
+            elif opcion_ingresada == 2:
+                if not aerolineas:
+                    print("Error: no hay aerolíneas registradas")
+                else:
+                    eliminar_aerolinea()
+            elif opcion_ingresada == 3:
+                if not aerolineas:
+                    print("Error: no hay aerolíneas registradas")
+                else:
+                    modificar_aerolinea()
+            elif opcion_ingresada == 4:
+                if not aerolineas:
+                    print("Error: no hay aerolíneas registradas para mostrar")
+                else:
+                    mostrar_aerolineas()
+            elif opcion_ingresada == 5: 
+                break
+            else:
+                print("Error: la opción ingresada no existe\n")
+        else:
+            print("Error: la opción ingresada no puede ser vacio")
+
+
+def incluir_aerolinea():
+    aerolinea_valida = False
+    while not aerolinea_valida:
+        aerolinea_ingresada = input("\nIngrese el nombre de la aerolinea (o s para regresar): ")
+        if aerolinea_ingresada != "":
+            if existe_aerolinea(aerolinea_ingresada):
+                print("Error: esta aerolínea ya existe")
+            elif aerolinea_ingresada == "s":
+                return
+            elif not validar_nombre_aerolinea(aerolinea_ingresada):
+                print("Error: el nombre de la aerolínea no puede ser solo números o de un solo caracter")
+            else:
+                aerolinea_valida = True
+        else:
+            print("Error: la aerolínea ingresada no puede ser vacio")
+
+    centro_operaciones_valido = False
+    while not centro_operaciones_valido:
+        centro_operaciones_ingresado = input("Ingrese el nombre del centro de operaciones (o s para regresar): ")
+        if centro_operaciones_ingresado != "":
+            if centro_operaciones_ingresado == "s":
+                return
+            elif not validar_nombre_centro_operaciones(centro_operaciones_ingresado):
+                print("Error: el nombre del centro de operaciones no puede ser solo números o de un solo caracter")
+            else:
+                centro_operaciones_valido = True
+        else:
+            print("Error: el centro de operaciones ingresado no puede ser vacio")
+
+    guardar_aerolinea(aerolinea_ingresada,centro_operaciones_ingresado)
+    print(f"Aerolínea {aerolinea_ingresada} agregada exitosamente")
+    return 
+
+def eliminar_aerolinea():
+    mostrar_aerolineas()
+    contenido_anterior = cargar_aerolineas()
+    indice_valido = False
+    while not indice_valido:
+        indice_ingresado = input("Ingresé el número de opción de la aerolínea que desea eliminar (o 0 para regresar): ")
+        if indice_ingresado != "":
+            try:
+                indice_ingresado = int(indice_ingresado)
+            except:
+                print("Error: el número de opción debe ser un valor númerico")
+                continue
+            if indice_ingresado < 0 or indice_ingresado > len(contenido_anterior):
+                print("Error: la opción ingresada no existe")
+            elif indice_ingresado == 0:
+                return
+            elif existe_aerolinea_asociada(contenido_anterior[indice_ingresado-1].split(";")[0]):
+                print("Error: no se puede eliminar ya que esta asociada a un avion")
+            else:
+                indice_valido = True
+        else: 
+            print("Error: la opción ingresada no puede ser vacio")
+            
+    
+    contenido_nuevo = contenido_anterior[:indice_ingresado-1] + contenido_anterior[indice_ingresado:]
+    reescribir_aerolineas(contenido_nuevo)
+    print(f"\nAerolínea:\nnombre aerolínea: {contenido_anterior[indice_ingresado-1].strip().split(";")[0]}\ncentro de operaciones en: {contenido_anterior[indice_ingresado-1].strip().split(";")[1]}\neliminada exitosamente")
+    mostrar_aerolineas()
+    return
+
+
+def modificar_aerolinea():
+    mostrar_aerolineas()
+    contenido_anterior = cargar_aerolineas()
+
+    indice_valido = False
+    while not indice_valido:
+        indice_ingresado = input("Ingrese el número de opción de la aerolínea que desea editar (0 para regresar): ")
+        if indice_ingresado !="":
+            try:
+                indice_ingresado = int(indice_ingresado)
+            except:
+                print("Error: el número de opción debe ser un valor númerico")
+                continue
+            if indice_ingresado < 0 or indice_ingresado > len(contenido_anterior):
+                print("Error: la opcion ingresada no existe")
+            elif indice_ingresado == 0:
+                return 
+            else:
+                indice_valido = True
+        else:
+            print("Error: el número de opción no puede ser vacio")
+    
+    aerolinea_valida = False
+    aerolinea_actual = contenido_anterior[indice_ingresado-1]
+    while not aerolinea_valida:
+        aerolinea_ingresada = input("Ingrese el nuevo nombre de la aerolínea (s para regresar o enter para mantener el nombre de la aerolinéa actual): ")
+        if aerolinea_ingresada == "":
+            aerolinea_ingresada = aerolinea_actual
+            aerolinea_valida = True
+        else:
+            if existe_aerolinea(aerolinea_ingresada) and aerolinea_ingresada != aerolinea_actual:
+                print("Error: esta aerolínea ya existe")
+            elif aerolinea_ingresada == "s":
+                return 
+            elif not validar_nombre_aerolinea(aerolinea_ingresada):
+                print("Error: el nombre de la aerolínea no puede ser solo números o de un solo caracter")
+            else:
+                aerolinea_valida = True
+
+    centro_operaciones_valido = False
+    datos_aerolinea = contenido_anterior[indice_ingresado-1].strip().split(";")
+    centro_operaciones_actual = datos_aerolinea[1]
+    while not centro_operaciones_valido:
+        centro_operaciones_ingresado = input("Ingrese el nuevo nombre del centro de operaciones (s para regresar o enter para mantener el nombre del centro de operaciones actual): ")
+        if centro_operaciones_ingresado == "":
+            centro_operaciones_ingresado = centro_operaciones_actual
+            centro_operaciones_valido = True
+        else:
+            if aerolinea_ingresada == "s":
+                return 
+            elif not validar_nombre_centro_operaciones(centro_operaciones_ingresado):
+                print("Error: el centro de operaciones ingresado no puede ser vacio")
+            else:
+                centro_operaciones_valido = True
+
+    datos_aerolinea[0] = aerolinea_ingresada
+    datos_aerolinea[1] = centro_operaciones_ingresado
+    contenido_anterior[indice_ingresado-1] = f"{datos_aerolinea[0]};{datos_aerolinea[1]}"
+    reescribir_aerolineas(contenido_anterior)
+    print(f"Aerolinea actualizada exitosamente")
+    return
+
+
+
