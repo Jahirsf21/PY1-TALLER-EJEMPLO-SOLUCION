@@ -32,8 +32,8 @@ def cargar_marcas():
         print("Error: el archivo aviones.txt no existe")
 
 def guardar_modelo(modelo,marca,asientos_ejecutiva,asientos_turista,asientos_economica):
+    ruta_archivo = "archivos/modeloAviones.txt"
     try:
-        ruta_archivo = "archivos/modeloAviones.txt"
         with open(ruta_archivo, "a", encoding="utf-8") as archivo:
             archivo.write(f"{modelo};{marca};{asientos_ejecutiva};{asientos_turista};{asientos_economica}\n")
     except:
@@ -55,6 +55,33 @@ def cargar_modelos():
             contenido = archivo.readlines()
         contenido = limpiar_contenido(contenido)
         return contenido
+    except:
+        print("Error: el archivo modeloAviones.txt no existe")
+
+def cargar_aerolineas():
+    ruta_archivo = "archivos/aerolineas.txt"
+    try:
+        with open(ruta_archivo, "r", encoding="utf-8") as archivo:
+            contenido = archivo.readlines()
+        contenido = limpiar_contenido(contenido)
+        return contenido
+    except:
+        print("Error: el archivo aerolineas.txt no existe")
+
+def guardar_aerolinea(nombre,centro_operaciones):
+    ruta_archivo = "archivos/aerolineas.txt"
+    try:
+        with open(ruta_archivo, "a", encoding="utf-8") as archivo:
+            archivo.write(f"{nombre};{centro_operaciones}\n")
+    except:
+        print("Error: el archivo aerolineas.txt no existe")
+
+def reescribir_aerolineas(contenido):
+    ruta_archivo = "archivos/aerolineas.txt"
+    try:
+        with open(ruta_archivo, "w", encoding="utf-8") as archivo:
+            for aerolinea in contenido:
+                archivo.write(aerolinea + "\n")
     except:
         print("Error: el archivo modeloAviones.txt no existe")
 
