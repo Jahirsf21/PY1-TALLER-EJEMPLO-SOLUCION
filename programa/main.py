@@ -58,11 +58,11 @@ def menu_administrador():
             elif opcion_ingresada == 4:
                 menu_gestion_aviones_aerolineas()
             elif opcion_ingresada == 5:
-                "menu_gestion_vuelos()"
+                menu_gestion_vuelos()
             elif opcion_ingresada == 6:
-                "estadisticas_vuelos()"
+                ""
             elif opcion_ingresada == 7:
-                "historial_reservaciones()"
+                "hola"
             elif opcion_ingresada == 8: 
                 break
             else:
@@ -685,7 +685,9 @@ def modificar_aerolinea(contenido_anterior):
             print("Error: la opcion no puede estar vacia.")
     
     aerolinea_valida = False
-    aerolinea_actual = contenido_anterior[indice_ingresado-1]
+    datos_aerolinea = contenido_anterior[indice_ingresado-1].strip().split(";")
+    aerolinea_actual = datos_aerolinea[0]
+
     while not aerolinea_valida:
         aerolinea_ingresada = input("Ingrese el nuevo nombre de la aerolinea (s para regresar, enter para mantener el nombre actual): ")
         if aerolinea_ingresada == "":
@@ -702,15 +704,15 @@ def modificar_aerolinea(contenido_anterior):
                 aerolinea_valida = True
 
     centro_operaciones_valido = False
-    datos_aerolinea = contenido_anterior[indice_ingresado-1].strip().split(";")
     centro_operaciones_actual = datos_aerolinea[1]
+
     while not centro_operaciones_valido:
         centro_operaciones_ingresado = input("Ingrese el nuevo nombre del centro de operaciones (s para regresar, enter para mantener el nombre actual): ")
         if centro_operaciones_ingresado == "":
             centro_operaciones_ingresado = centro_operaciones_actual
             centro_operaciones_valido = True
         else:
-            if aerolinea_ingresada == "s":
+            if centro_operaciones_ingresado == "s":
                 return 
             elif not validar_nombre_centro_operaciones(centro_operaciones_ingresado):
                 print("Error: el centro de operaciones no es valido.")
@@ -1016,9 +1018,9 @@ def modificar_avion_marca(avion_seleccionado, contenido_anterior, indice_selecci
             elif not existe_marca_asociada(marcas[indice_ingresado-1]):
                 print("Error: no se puede usar esta marca; no esta asociada a ningun modelo.")
             else:
+                marca_seleccionada = marcas[indice_ingresado-1]
                 indice_valido = True
 
-    marca_seleccionada = marcas[indice_ingresado-1]
     datos_avion = contenido_anterior[indice_seleccionado].split(";")
     datos_avion[1] = marca_seleccionada
     contenido_anterior[indice_seleccionado] = f"{datos_avion[0]};{datos_avion[1]};{datos_avion[2]};{datos_avion[3]};{datos_avion[4]}"
@@ -1111,5 +1113,626 @@ def modificar_avion_aerolinea(avion_seleccionado, contenido_anterior, indice_sel
     print("\nAerolinea del avion modificada exitosamente")
     return modificar_avion_aux(contenido_anterior[indice_seleccionado].split(";"), contenido_anterior, indice_seleccionado)
 
+def menu_gestion_vuelos():
+    while True:
+        print("\nAdministrador - Gestion de vuelos")
+        print("Opciones disponibles")
+        print("--------------------")
+        print("1) Incluir vuelo")
+        print("2) Eliminar vuelo")
+        print("3) Modificar vuelo")
+        print("4) Estadisticas vuelos")
+        print("5) Regresar al menu principal")
+        vuelos = cargar_vuelos()
+        aviones = cargar_aviones()
+        opcion_ingresada = input("Ingrese una opcion: ")
+        if opcion_ingresada != "":
+            try:
+                opcion_ingresada = int(opcion_ingresada)
+            except:
+                print("Error: la opcion debe ser un numero.")
+                continue
+            if opcion_ingresada == 1:
+                if not aviones:
+                    print("Error: no hay aviones registrados para incluirlos en un vuelo")
+                else:
+                    incluir_vuelo(vuelos)
+            elif opcion_ingresada == 2:
+                if not vuelos:
+                    print("Error: no hay vuelos registrados para eliminar.")
+                else:
+                    eliminar_vuelo(vuelos)
+            elif opcion_ingresada == 3:
+                if not vuelos:
+                    print("Error: no hay vuelos registrados para modificar.")
+                elif not aviones:
+                    print("Error: no hay aviones registrados para incluirlos en un vuelo")
+                else:
+                    modificar_vuelo(vuelos)
+            elif opcion_ingresada == 4:
+                if not vuelos:
+                    print("Error: no hay vuelos registrados.")
+                else:
+                    ""
+            elif opcion_ingresada == 5:
+                break
+            else:
+                print("Error: la opcion ingresada no existe.")
+        else:
+            print("Error: la opcion no puede estar vacia.")
 
-menu_gestion_aviones_aerolineas()
+def generar_numero_vuelo(contenido_vuelos):
+    cantidad_vuelos = 0
+    if contenido_vuelos:
+        for vuelo in contenido_vuelos:
+            numero_vuelo = vuelo.strip().split(";")[0]
+            if numero_vuelo.startswith("AV"):
+                numero = numero_vuelo[2:]
+                numero = int(numero)
+                if numero > cantidad_vuelos:
+                    cantidad_vuelos = numero
+    numero_nuevo = cantidad_vuelos + 1
+    return f"AV{numero_nuevo}"
+
+def incluir_vuelo(contenido_vuelos):
+    numero_vuelo = generar_numero_vuelo(contenido_vuelos)
+
+    codigo_salida_valido = False
+    while not codigo_salida_valido:
+        codigo_ingresado = input("Ingrese el codigo de aeropuerto de salida (s para regresar): ")
+        if codigo_ingresado == "s":
+            return
+        elif codigo_ingresado == "":
+            print("Error: el codigo de aeropuerto no puede estar vacio.")
+        elif not validar_codigo_aeropuerto(codigo_ingresado):
+            print("Error: el codigo de aeropuerto no es valido.")
+        else:
+            codigo_salida = codigo_ingresado.upper().strip()
+            codigo_salida_valido = True
+
+    fecha_salida_valida = False
+    while not fecha_salida_valida:
+        fecha_ingresada = input("Ingrese la fecha de salida (DD/MM/AAAA) (s para regresar): ")
+        if fecha_ingresada == "s":
+            return
+        elif fecha_ingresada == "":
+            print("Error: la fecha de salida no puede estar vacia.")
+        elif not validar_fecha(fecha_ingresada):
+            print("Error: la fecha de salida no es valida.")
+        else:
+            fecha_salida = fecha_ingresada
+            fecha_salida_valida = True
+
+    hora_salida_valida = False
+    while not hora_salida_valida:
+        hora_ingresada = input("Ingrese la hora de salida (HH:MM) (s para regresar): ")
+        if hora_ingresada == "s":
+            return
+        elif hora_ingresada == "":
+            print("Error: la hora de salida no puede estar vacia.")
+        elif not validar_hora(hora_ingresada):
+            print("Error: la hora de salida no es valida.")
+        else:
+            hora_salida = hora_ingresada
+            hora_salida_valida = True
+
+    codigo_arribo_valido = False
+    while not codigo_arribo_valido:
+        codigo_ingresado = input("Ingrese el codigo de aeropuerto de arribo (s para regresar): ")
+        if codigo_ingresado == "s":
+            return
+        elif codigo_ingresado == "":
+            print("Error: el codigo de aeropuerto no puede estar vacio.")
+        elif not validar_codigo_aeropuerto(codigo_ingresado):
+            print("Error: el codigo de aeropuerto no es valido.")
+        else:
+            codigo_arribo = codigo_ingresado.upper().strip()
+            codigo_arribo_valido = True
+
+    fecha_arribo_valida = False
+    while not fecha_arribo_valida:
+        fecha_ingresada = input("Ingrese la fecha de arribo (DD/MM/AAAA) (s para regresar): ")
+        if fecha_ingresada == "s":
+            return
+        elif fecha_ingresada == "":
+            print("Error: la fecha de arribo no puede estar vacia.")
+        elif not validar_fecha(fecha_ingresada):
+            print("Error: la fecha de arribo no es valida.")
+        else:
+            fecha_arribo = fecha_ingresada
+            fecha_arribo_valida = True
+
+    hora_arribo_valida = False
+    while not hora_arribo_valida:
+        hora_ingresada = input("Ingrese la hora de arribo (HH:MM) (s para regresar): ")
+        if hora_ingresada == "s":
+            return
+        elif hora_ingresada == "":
+            print("Error: la hora de arribo no puede estar vacia.")
+        elif not validar_hora(hora_ingresada):
+            print("Error: la hora de arribo no es valida.")
+        else:
+            hora_arribo = hora_ingresada
+            hora_arribo_valida = True
+
+    aerolinea_valida = False
+    while not aerolinea_valida:
+        aerolineas = cargar_aerolineas()
+        if not aerolineas:
+            print("Error: no hay aerolineas registradas.")
+            return
+        mostrar_aerolineas()
+        indice_ingresado = input("Ingrese el numero de opcion de la aerolinea (0 para regresar): ")
+        if indice_ingresado != "":
+            try:
+                indice_ingresado = int(indice_ingresado)
+            except:
+                print("Error: la opcion debe ser un numero.")
+                continue
+            if indice_ingresado < 0 or indice_ingresado > len(aerolineas):
+                print("Error: la opcion ingresada no existe.")
+            elif indice_ingresado == 0:
+                return
+            else:
+                aerolinea_seleccionada = aerolineas[indice_ingresado-1].strip().split(";")[0]
+                aviones_disponibles = mostrar_aviones_aerolinea(aerolinea_seleccionada)
+                if not aviones_disponibles:
+                    print("Error: no hay aviones registrados para esta aerolinea.")
+                else:
+                    aerolinea_valida = True
+        else:
+            print("Error: la opcion no puede estar vacia.")
+
+    matricula_valida = False
+
+    while not matricula_valida:
+        indice_ingresado = input("Ingrese el numero de opcion de la matricula (0 para regresar): ")
+        if indice_ingresado != "":
+            try:
+                indice_ingresado = int(indice_ingresado)
+            except:
+                print("Error: la opcion debe ser un numero.")
+                continue
+            if indice_ingresado < 0 or indice_ingresado > len(aviones_disponibles):
+                print("Error: la opcion ingresada no existe.")
+            elif indice_ingresado == 0:
+                return
+            else:
+                matricula_seleccionada = aviones_disponibles[indice_ingresado-1].strip().split(";")[0]
+                matricula_valida = True
+        else:
+            print("Error: la opcion no puede estar vacia.")
+
+    monto_ejecutiva_valido = False
+    while not monto_ejecutiva_valido:
+        monto_ingresado = input("Ingrese el monto para la clase ejecutiva (0 para regresar): ")
+        if monto_ingresado == "0":
+            return
+        elif monto_ingresado == "":
+            print("Error: el monto no puede estar vacio.")
+        elif not validar_monto(monto_ingresado):
+            print("Error: el monto debe ser un numero mayor que 0.")
+        else:
+            monto_ejecutiva = monto_ingresado
+            monto_ejecutiva_valido = True
+
+    monto_turista_valido = False
+    while not monto_turista_valido:
+        monto_ingresado = input("Ingrese el monto para la clase turista (0 para regresar): ")
+        if monto_ingresado == "0":
+            return
+        elif monto_ingresado == "":
+            print("Error: el monto no puede estar vacio.")
+        elif not validar_monto(monto_ingresado):
+            print("Error: el monto debe ser un numero mayor que 0.")
+        else:
+            monto_turista = monto_ingresado
+            monto_turista_valido = True
+
+    monto_economica_valido = False
+    while not monto_economica_valido:
+        monto_ingresado = input("Ingrese el monto para la clase economica (0 para regresar): ")
+        if monto_ingresado == "0":
+            return
+        elif monto_ingresado == "":
+            print("Error: el monto no puede estar vacio.")
+        elif not validar_monto(monto_ingresado):
+            print("Error: el monto debe ser un numero mayor que 0.")
+        else:
+            monto_economica = monto_ingresado
+            monto_economica_valido = True
+
+    guardar_vuelo(numero_vuelo,codigo_salida,fecha_salida,hora_salida,codigo_arribo,fecha_arribo,hora_arribo,aerolinea_seleccionada,matricula_seleccionada,monto_ejecutiva,monto_turista,monto_economica)
+    print(f"\nInformacion del vuelo:\nNumero vuelo: {numero_vuelo}\nSalida: {codigo_salida} {fecha_salida} {hora_salida}\nArribo: {codigo_arribo} {fecha_arribo} {hora_arribo}\nAerolinea: {aerolinea_seleccionada} Matricula: {matricula_seleccionada}\nMontos: ejecutiva {monto_ejecutiva}, turista {monto_turista}, economica {monto_economica}\nVuelo agregado exitosamente")
+    return
+
+def eliminar_vuelo(contenido_anterior):
+    mostrar_vuelos()
+    indice_valido = False
+    while not indice_valido:
+        indice_ingresado = input("Ingrese el numero de opcion del vuelo que desea eliminar (0 para regresar): ")
+        if indice_ingresado != "":
+            try:
+                indice_ingresado = int(indice_ingresado)
+            except:
+                print("Error: la opcion debe ser un numero.")
+                continue
+            if indice_ingresado < 0 or indice_ingresado > len(contenido_anterior):
+                print("Error: la opcion ingresada no existe.")
+            elif indice_ingresado == 0:
+                return
+            else:
+                indice_valido = True
+        else:
+            print("Error: la opcion no puede estar vacia.")
+
+    vuelo_seleccionado = contenido_anterior[indice_ingresado-1].strip().split(";")
+    contenido_nuevo = contenido_anterior[:indice_ingresado-1] + contenido_anterior[indice_ingresado:]
+    reescribir_vuelos(contenido_nuevo)
+    print(f"\nInformacion del vuelo:\nNumero vuelo: {vuelo_seleccionado[0]}\nSalida: {vuelo_seleccionado[1]} {vuelo_seleccionado[2]} {vuelo_seleccionado[3]}\nArribo: {vuelo_seleccionado[4]} {vuelo_seleccionado[5]} {vuelo_seleccionado[6]}\nAerolinea: {vuelo_seleccionado[7]} Matricula: {vuelo_seleccionado[8]}\nEliminado exitosamente")
+    mostrar_vuelos()
+    return
+
+def modificar_vuelo(contenido_anterior):
+    mostrar_vuelos()
+    indice_valido = False
+    while not indice_valido:
+        indice_ingresado = input("Ingrese el numero de opcion del vuelo que desea modificar (0 para regresar): ")
+        if indice_ingresado != "":
+            try:
+                indice_ingresado = int(indice_ingresado)
+            except:
+                print("Error: la opcion debe ser un numero.")
+                continue
+            if indice_ingresado < 0 or indice_ingresado > len(contenido_anterior):
+                print("Error: la opcion ingresada no existe.")
+            elif indice_ingresado == 0:
+                return
+            else:
+                indice_valido = True
+        else:
+            print("Error: la opcion no puede estar vacia.")
+
+    vuelo_seleccionado = contenido_anterior[indice_ingresado-1].split(";")
+    return modificar_vuelo_aux(vuelo_seleccionado, contenido_anterior, indice_ingresado-1)
+
+def modificar_vuelo_aux(vuelo_seleccionado, contenido_anterior, indice_seleccionado):
+    print(f"\nVuelo seleccionado para editar:\nNumero vuelo: {vuelo_seleccionado[0]}\nSalida: {vuelo_seleccionado[1]} {vuelo_seleccionado[2]} {vuelo_seleccionado[3]}\nArribo: {vuelo_seleccionado[4]} {vuelo_seleccionado[5]} {vuelo_seleccionado[6]}\nAerolinea: {vuelo_seleccionado[7]} Matricula: {vuelo_seleccionado[8]}\nMontos: ejecutiva {vuelo_seleccionado[9]}, turista {vuelo_seleccionado[10]}, economica {vuelo_seleccionado[11]}\n")
+    while True:
+        print("Opciones disponibles")
+        print("--------------------")
+        print("1) Editar codigo de salida")
+        print("2) Editar fecha de salida")
+        print("3) Editar hora de salida")
+        print("4) Editar codigo de arribo")
+        print("5) Editar fecha de arribo")
+        print("6) Editar hora de arribo")
+        print("7) Editar aerolinea")
+        print("8) Editar matricula")
+        print("9) Editar monto clase ejecutiva")
+        print("10) Editar monto clase turista")
+        print("11) Editar monto clase economica")
+        print("12) Regresar al menu de gestion de vuelos")
+        opcion_ingresada = input("Ingrese una opcion: ")
+        if opcion_ingresada != "":
+            try:
+                opcion_ingresada = int(opcion_ingresada)
+            except:
+                print("Error: la opcion debe ser un numero.")
+                continue
+            if opcion_ingresada == 1:
+                return modificar_vuelo_codigo_salida(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+            elif opcion_ingresada == 2:
+                return modificar_vuelo_fecha_salida(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+            elif opcion_ingresada == 3:
+                return modificar_vuelo_hora_salida(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+            elif opcion_ingresada == 4:
+                return modificar_vuelo_codigo_arribo(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+            elif opcion_ingresada == 5:
+                return modificar_vuelo_fecha_arribo(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+            elif opcion_ingresada == 6:
+                return modificar_vuelo_hora_arribo(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+            elif opcion_ingresada == 7:
+                return modificar_vuelo_aerolinea(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+            elif opcion_ingresada == 8:
+                return modificar_vuelo_matricula(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+            elif opcion_ingresada == 9:
+                return modificar_vuelo_monto_ejecutiva(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+            elif opcion_ingresada == 10:
+                return modificar_vuelo_monto_turista(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+            elif opcion_ingresada == 11:
+                return modificar_vuelo_monto_economica(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+            elif opcion_ingresada == 12:
+                return
+        else:
+            print("Error: la opcion no puede estar vacia.")
+
+def modificar_vuelo_codigo_salida(vuelo_seleccionado, contenido_anterior, indice_seleccionado):
+    codigo_valido = False
+    while not codigo_valido:
+        codigo_ingresado = input("\nIngrese el nuevo codigo de aeropuerto de salida (s para regresar, enter para mantener): ")
+        if codigo_ingresado == "":
+            codigo_ingresado = vuelo_seleccionado[1]
+            codigo_valido = True
+        else:
+            if codigo_ingresado == "s":
+                return modificar_vuelo_aux(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+            elif not validar_codigo_aeropuerto(codigo_ingresado):
+                print("Error: el codigo de aeropuerto no es valido.")
+            else:
+                codigo_ingresado = codigo_ingresado.upper().strip()
+                codigo_valido = True
+
+    datos_vuelo = contenido_anterior[indice_seleccionado].split(";")
+    datos_vuelo[1] = codigo_ingresado
+    contenido_anterior[indice_seleccionado] = f"{datos_vuelo[0]};{datos_vuelo[1]};{datos_vuelo[2]};{datos_vuelo[3]};{datos_vuelo[4]};{datos_vuelo[5]};{datos_vuelo[6]};{datos_vuelo[7]};{datos_vuelo[8]};{datos_vuelo[9]};{datos_vuelo[10]};{datos_vuelo[11]}"
+    reescribir_vuelos(contenido_anterior)
+    print("\nCodigo de salida modificado exitosamente")
+    return modificar_vuelo_aux(contenido_anterior[indice_seleccionado].split(";"), contenido_anterior, indice_seleccionado)
+
+def modificar_vuelo_fecha_salida(vuelo_seleccionado, contenido_anterior, indice_seleccionado):
+    fecha_valida = False
+    while not fecha_valida:
+        fecha_ingresada = input("\nIngrese la nueva fecha de salida (DD/MM/AAAA) (s para regresar, enter para mantener): ")
+        if fecha_ingresada == "":
+            fecha_ingresada = vuelo_seleccionado[2]
+            fecha_valida = True
+        else:
+            if fecha_ingresada == "s":
+                return modificar_vuelo_aux(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+            elif not validar_fecha(fecha_ingresada):
+                print("Error: la fecha de salida no es valida.")
+            else:
+                fecha_valida = True
+
+    datos_vuelo = contenido_anterior[indice_seleccionado].split(";")
+    datos_vuelo[2] = fecha_ingresada
+    contenido_anterior[indice_seleccionado] = f"{datos_vuelo[0]};{datos_vuelo[1]};{datos_vuelo[2]};{datos_vuelo[3]};{datos_vuelo[4]};{datos_vuelo[5]};{datos_vuelo[6]};{datos_vuelo[7]};{datos_vuelo[8]};{datos_vuelo[9]};{datos_vuelo[10]};{datos_vuelo[11]}"
+    reescribir_vuelos(contenido_anterior)
+    print("\nFecha de salida modificada exitosamente")
+    return modificar_vuelo_aux(contenido_anterior[indice_seleccionado].split(";"), contenido_anterior, indice_seleccionado)
+
+def modificar_vuelo_hora_salida(vuelo_seleccionado, contenido_anterior, indice_seleccionado):
+    hora_valida = False
+    while not hora_valida:
+        hora_ingresada = input("\nIngrese la nueva hora de salida (HH:MM) (s para regresar, enter para mantener): ")
+        if hora_ingresada == "":
+            hora_ingresada = vuelo_seleccionado[3]
+            hora_valida = True
+        else:
+            if hora_ingresada == "s":
+                return modificar_vuelo_aux(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+            elif not validar_hora(hora_ingresada):
+                print("Error: la hora de salida no es valida.")
+            else:
+                hora_valida = True
+
+    datos_vuelo = contenido_anterior[indice_seleccionado].split(";")
+    datos_vuelo[3] = hora_ingresada
+    contenido_anterior[indice_seleccionado] = f"{datos_vuelo[0]};{datos_vuelo[1]};{datos_vuelo[2]};{datos_vuelo[3]};{datos_vuelo[4]};{datos_vuelo[5]};{datos_vuelo[6]};{datos_vuelo[7]};{datos_vuelo[8]};{datos_vuelo[9]};{datos_vuelo[10]};{datos_vuelo[11]}"
+    reescribir_vuelos(contenido_anterior)
+    print("\nHora de salida modificada exitosamente")
+    return modificar_vuelo_aux(contenido_anterior[indice_seleccionado].split(";"), contenido_anterior, indice_seleccionado)
+
+def modificar_vuelo_codigo_arribo(vuelo_seleccionado, contenido_anterior, indice_seleccionado):
+    codigo_valido = False
+    while not codigo_valido:
+        codigo_ingresado = input("\nIngrese el nuevo codigo de aeropuerto de arribo (s para regresar, enter para mantener): ")
+        if codigo_ingresado == "":
+            codigo_ingresado = vuelo_seleccionado[4]
+            codigo_valido = True
+        else:
+            if codigo_ingresado == "s":
+                return modificar_vuelo_aux(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+            elif not validar_codigo_aeropuerto(codigo_ingresado):
+                print("Error: el codigo de aeropuerto no es valido.")
+            else:
+                codigo_ingresado = codigo_ingresado.upper().strip()
+                codigo_valido = True
+
+    datos_vuelo = contenido_anterior[indice_seleccionado].split(";")
+    datos_vuelo[4] = codigo_ingresado
+    contenido_anterior[indice_seleccionado] = f"{datos_vuelo[0]};{datos_vuelo[1]};{datos_vuelo[2]};{datos_vuelo[3]};{datos_vuelo[4]};{datos_vuelo[5]};{datos_vuelo[6]};{datos_vuelo[7]};{datos_vuelo[8]};{datos_vuelo[9]};{datos_vuelo[10]};{datos_vuelo[11]}"
+    reescribir_vuelos(contenido_anterior)
+    print("\nCodigo de arribo modificado exitosamente")
+    return modificar_vuelo_aux(contenido_anterior[indice_seleccionado].split(";"), contenido_anterior, indice_seleccionado)
+
+def modificar_vuelo_fecha_arribo(vuelo_seleccionado, contenido_anterior, indice_seleccionado):
+    fecha_valida = False
+    while not fecha_valida:
+        fecha_ingresada = input("\nIngrese la nueva fecha de arribo (DD/MM/AAAA) (s para regresar, enter para mantener): ")
+        if fecha_ingresada == "":
+            fecha_ingresada = vuelo_seleccionado[5]
+            fecha_valida = True
+        else:
+            if fecha_ingresada == "s":
+                return modificar_vuelo_aux(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+            elif not validar_fecha(fecha_ingresada):
+                print("Error: la fecha de arribo no es valida.")
+            else:
+                fecha_valida = True
+
+    datos_vuelo = contenido_anterior[indice_seleccionado].split(";")
+    datos_vuelo[5] = fecha_ingresada
+    contenido_anterior[indice_seleccionado] = f"{datos_vuelo[0]};{datos_vuelo[1]};{datos_vuelo[2]};{datos_vuelo[3]};{datos_vuelo[4]};{datos_vuelo[5]};{datos_vuelo[6]};{datos_vuelo[7]};{datos_vuelo[8]};{datos_vuelo[9]};{datos_vuelo[10]};{datos_vuelo[11]}"
+    reescribir_vuelos(contenido_anterior)
+    print("\nFecha de arribo modificada exitosamente")
+    return modificar_vuelo_aux(contenido_anterior[indice_seleccionado].split(";"), contenido_anterior, indice_seleccionado)
+
+def modificar_vuelo_hora_arribo(vuelo_seleccionado, contenido_anterior, indice_seleccionado):
+    hora_valida = False
+    while not hora_valida:
+        hora_ingresada = input("\nIngrese la nueva hora de arribo (HH:MM) (s para regresar, enter para mantener): ")
+        if hora_ingresada == "":
+            hora_ingresada = vuelo_seleccionado[6]
+            hora_valida = True
+        else:
+            if hora_ingresada == "s":
+                return modificar_vuelo_aux(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+            elif not validar_hora(hora_ingresada):
+                print("Error: la hora de arribo no es valida.")
+            else:
+                hora_valida = True
+
+    datos_vuelo = contenido_anterior[indice_seleccionado].split(";")
+    datos_vuelo[6] = hora_ingresada
+    contenido_anterior[indice_seleccionado] = f"{datos_vuelo[0]};{datos_vuelo[1]};{datos_vuelo[2]};{datos_vuelo[3]};{datos_vuelo[4]};{datos_vuelo[5]};{datos_vuelo[6]};{datos_vuelo[7]};{datos_vuelo[8]};{datos_vuelo[9]};{datos_vuelo[10]};{datos_vuelo[11]}"
+    reescribir_vuelos(contenido_anterior)
+    print("\nHora de arribo modificada exitosamente")
+    return modificar_vuelo_aux(contenido_anterior[indice_seleccionado].split(";"), contenido_anterior, indice_seleccionado)
+
+def modificar_vuelo_aerolinea(vuelo_seleccionado, contenido_anterior, indice_seleccionado):
+    aerolineas = cargar_aerolineas()
+    if not aerolineas:
+        print("Error: no hay aerolineas registradas.")
+        return modificar_vuelo_aux(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+
+    mostrar_aerolineas()
+    indice_valido = False
+    while not indice_valido:
+        indice_ingresado = input("Ingrese el numero de opcion de la nueva aerolinea (0 para regresar, enter para mantener): ")
+        if indice_ingresado == "":
+            aerolinea_seleccionada = vuelo_seleccionado[7]
+            matricula_seleccionada = vuelo_seleccionado[8]
+            indice_valido = True
+        else:
+            try:
+                indice_ingresado = int(indice_ingresado)
+            except:
+                print("Error: la opcion debe ser un numero.")
+                continue
+            if indice_ingresado < 0 or indice_ingresado > len(aerolineas):
+                print("Error: la opcion ingresada no existe.")
+            elif indice_ingresado == 0:
+                return modificar_vuelo_aux(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+            else:
+                aerolinea_seleccionada = aerolineas[indice_ingresado-1].strip().split(";")[0]
+                aviones_disponibles = mostrar_aviones_aerolinea(aerolinea_seleccionada)
+                if not aviones_disponibles:
+                    print("Error: no hay aviones registrados para esta aerolinea.")
+                else:
+                    indice_matricula_valido = False
+                    while not indice_matricula_valido:
+                        indice_matricula = input("Ingrese el numero de opcion de la matricula (0 para regresar): ")
+                        if indice_matricula != "":
+                            try:
+                                indice_matricula = int(indice_matricula)
+                            except:
+                                print("Error: la opcion debe ser un numero.")
+                                continue
+                            if indice_matricula < 0 or indice_matricula > len(aviones_disponibles):
+                                print("Error: la opcion ingresada no existe.")
+                            elif indice_matricula == 0:
+                                return modificar_vuelo_aux(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+                            else:
+                                matricula_seleccionada = aviones_disponibles[indice_matricula-1].strip().split(";")[0]
+                                indice_matricula_valido = True
+                                indice_valido = True
+                        else:
+                            print("Error: la opcion no puede estar vacia.")
+
+    datos_vuelo = contenido_anterior[indice_seleccionado].split(";")
+    datos_vuelo[7] = aerolinea_seleccionada
+    datos_vuelo[8] = matricula_seleccionada
+    contenido_anterior[indice_seleccionado] = f"{datos_vuelo[0]};{datos_vuelo[1]};{datos_vuelo[2]};{datos_vuelo[3]};{datos_vuelo[4]};{datos_vuelo[5]};{datos_vuelo[6]};{datos_vuelo[7]};{datos_vuelo[8]};{datos_vuelo[9]};{datos_vuelo[10]};{datos_vuelo[11]}"
+    reescribir_vuelos(contenido_anterior)
+    print("\nAerolinea del vuelo modificada exitosamente")
+    return modificar_vuelo_aux(contenido_anterior[indice_seleccionado].split(";"), contenido_anterior, indice_seleccionado)
+
+def modificar_vuelo_matricula(vuelo_seleccionado, contenido_anterior, indice_seleccionado):
+    aviones_disponibles = mostrar_aviones_aerolinea(vuelo_seleccionado[7])
+    if not aviones_disponibles:
+        print("Error: no hay aviones registrados para esta aerolinea.")
+        return modificar_vuelo_aux(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+
+    indice_valido = False
+    while not indice_valido:
+        indice_ingresado = input("Ingrese el numero de opcion de la matricula (0 para regresar, enter para mantener): ")
+        if indice_ingresado == "":
+            matricula_seleccionada = vuelo_seleccionado[8]
+            indice_valido = True
+        else:
+            try:
+                indice_ingresado = int(indice_ingresado)
+            except:
+                print("Error: la opcion debe ser un numero.")
+                continue
+            if indice_ingresado < 0 or indice_ingresado > len(aviones_disponibles):
+                print("Error: la opcion ingresada no existe.")
+            elif indice_ingresado == 0:
+                return modificar_vuelo_aux(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+            else:
+                matricula_seleccionada = aviones_disponibles[indice_ingresado-1].strip().split(";")[0]
+                indice_valido = True
+
+    datos_vuelo = contenido_anterior[indice_seleccionado].split(";")
+    datos_vuelo[8] = matricula_seleccionada
+    contenido_anterior[indice_seleccionado] = f"{datos_vuelo[0]};{datos_vuelo[1]};{datos_vuelo[2]};{datos_vuelo[3]};{datos_vuelo[4]};{datos_vuelo[5]};{datos_vuelo[6]};{datos_vuelo[7]};{datos_vuelo[8]};{datos_vuelo[9]};{datos_vuelo[10]};{datos_vuelo[11]}"
+    reescribir_vuelos(contenido_anterior)
+    print("\nMatricula del vuelo modificada exitosamente")
+    return modificar_vuelo_aux(contenido_anterior[indice_seleccionado].split(";"), contenido_anterior, indice_seleccionado)
+
+def modificar_vuelo_monto_ejecutiva(vuelo_seleccionado, contenido_anterior, indice_seleccionado):
+    monto_valido = False
+    while not monto_valido:
+        monto_ingresado = input("Ingrese el nuevo monto de clase ejecutiva (0 para regresar, enter para mantener): ")
+        if monto_ingresado == "":
+            monto_ingresado = vuelo_seleccionado[9]
+            monto_valido = True
+        elif monto_ingresado == "0":
+            return modificar_vuelo_aux(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+        elif not validar_monto(monto_ingresado):
+            print("Error: el monto debe ser un numero mayor que 0.")
+        else:
+            monto_valido = True
+
+    datos_vuelo = contenido_anterior[indice_seleccionado].split(";")
+    datos_vuelo[9] = monto_ingresado
+    contenido_anterior[indice_seleccionado] = f"{datos_vuelo[0]};{datos_vuelo[1]};{datos_vuelo[2]};{datos_vuelo[3]};{datos_vuelo[4]};{datos_vuelo[5]};{datos_vuelo[6]};{datos_vuelo[7]};{datos_vuelo[8]};{datos_vuelo[9]};{datos_vuelo[10]};{datos_vuelo[11]}"
+    reescribir_vuelos(contenido_anterior)
+    print("\nMonto clase ejecutiva modificado exitosamente")
+    return modificar_vuelo_aux(contenido_anterior[indice_seleccionado].split(";"), contenido_anterior, indice_seleccionado)
+
+def modificar_vuelo_monto_turista(vuelo_seleccionado, contenido_anterior, indice_seleccionado):
+    monto_valido = False
+    while not monto_valido:
+        monto_ingresado = input("Ingrese el nuevo monto de clase turista (0 para regresar, enter para mantener): ")
+        if monto_ingresado == "":
+            monto_ingresado = vuelo_seleccionado[10]
+            monto_valido = True
+        elif monto_ingresado == "0":
+            return modificar_vuelo_aux(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+        elif not validar_monto(monto_ingresado):
+            print("Error: el monto debe ser un numero mayor que 0.")
+        else:
+            monto_valido = True
+
+    datos_vuelo = contenido_anterior[indice_seleccionado].split(";")
+    datos_vuelo[10] = monto_ingresado
+    contenido_anterior[indice_seleccionado] = f"{datos_vuelo[0]};{datos_vuelo[1]};{datos_vuelo[2]};{datos_vuelo[3]};{datos_vuelo[4]};{datos_vuelo[5]};{datos_vuelo[6]};{datos_vuelo[7]};{datos_vuelo[8]};{datos_vuelo[9]};{datos_vuelo[10]};{datos_vuelo[11]}"
+    reescribir_vuelos(contenido_anterior)
+    print("\nMonto clase turista modificado exitosamente")
+    return modificar_vuelo_aux(contenido_anterior[indice_seleccionado].split(";"), contenido_anterior, indice_seleccionado)
+
+def modificar_vuelo_monto_economica(vuelo_seleccionado, contenido_anterior, indice_seleccionado):
+    monto_valido = False
+    while not monto_valido:
+        monto_ingresado = input("Ingrese el nuevo monto de clase economica (0 para regresar, enter para mantener): ")
+        if monto_ingresado == "":
+            monto_ingresado = vuelo_seleccionado[11]
+            monto_valido = True
+        elif monto_ingresado == "0":
+            return modificar_vuelo_aux(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
+        elif not validar_monto(monto_ingresado):
+            print("Error: el monto debe ser un numero mayor que 0.")
+        else:
+            monto_valido = True
+
+    datos_vuelo = contenido_anterior[indice_seleccionado].split(";")
+    datos_vuelo[11] = monto_ingresado
+    contenido_anterior[indice_seleccionado] = f"{datos_vuelo[0]};{datos_vuelo[1]};{datos_vuelo[2]};{datos_vuelo[3]};{datos_vuelo[4]};{datos_vuelo[5]};{datos_vuelo[6]};{datos_vuelo[7]};{datos_vuelo[8]};{datos_vuelo[9]};{datos_vuelo[10]};{datos_vuelo[11]}"
+    reescribir_vuelos(contenido_anterior)
+    print("\nMonto clase economica modificado exitosamente")
+    return modificar_vuelo_aux(contenido_anterior[indice_seleccionado].split(";"), contenido_anterior, indice_seleccionado)
+
+menu_principal()
