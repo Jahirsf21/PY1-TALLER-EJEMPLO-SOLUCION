@@ -131,4 +131,4 @@ def cargar_vuelos():
         contenido = limpiar_contenido(contenido)
         return contenido
     except:
-        print("Error: el archivo avionesAerolineas.txt no existe")
+        print("Error: el archivo vuelos.txt no existe")
