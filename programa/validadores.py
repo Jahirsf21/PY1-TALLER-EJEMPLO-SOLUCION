@@ -1,33 +1,5 @@
 from acceso_datos import *
-
-def control_acceso():
-    usuarios_cargados = cargar_usuarios()
-    if not usuarios_cargados:
-        print("Error: No se encontraron usuarios disponibles")
-    else:
-        for usuarios in usuarios_cargados:
-            usuario = usuarios.strip().split(";")[0]
-            clave = usuarios.strip().split(";")[1]
-            usuario_valido = False
-            while not usuario_valido:
-                usuario_ingresado = input("Ingrese su nombre de usuario ( o s para salir): ")
-                if usuario_ingresado == usuario:
-                    usuario_valido = True
-                elif usuario_ingresado == "s":
-                    return 2
-                else:
-                    print("Error: El usuario ingresado no existe")
-            clave_valida = False
-            while not clave_valida:
-                clave_ingresada = input("Ingrese su contraseña ( o s para salir): ")
-                if clave_ingresada == clave:
-                    clave_valida = True
-                    return 1
-                elif clave_ingresada == "s":
-                    return 2
-                else:
-                    print("Error: La contraseña es incorrecta")
-
+                    
 def validar_nombre_marca(nombre):
     contador_digitos = 0
     contador_letras = 0
