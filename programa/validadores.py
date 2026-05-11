@@ -28,7 +28,6 @@ def control_acceso():
                 else:
                     print("Error: La contraseña es incorrecta")
 
-
 def validar_nombre_marca(nombre):
     contador_digitos = 0
     contador_letras = 0
@@ -96,6 +95,63 @@ def validar_matricula(matricula):
         if not caracter.isdigit() and not caracter.isalpha():
             return False  
     return True 
+
+def validar_codigo_aeropuerto(codigo):
+    if len(codigo) != 3:
+        return False
+    for caracter in codigo:
+        if not caracter.isalpha():
+            return False
+    return True
+
+def validar_fecha(fecha):
+    partes = fecha.split("/")
+    if len(partes) != 3:
+        return False
+    
+    dia = partes[0]
+    mes = partes[1]
+    año = partes[2]
+    if not dia.isdigit() or not mes.isdigit() or not año.isdigit():
+        return False
+    
+    dia = int(dia)
+    mes = int(mes)
+    año = int(año)
+    if dia < 1 or dia > 31:
+        return False
+    if mes < 1 or mes > 12:
+        return False
+    if año < 2026 or año > 2026:
+        return False
+    return True
+
+def validar_hora(hora):
+    partes = hora.split(":")
+    if len(partes) != 2:
+        return False
+    
+    horas = partes[0]
+    minutos = partes[1]
+    if not horas.isdigit() or not minutos.isdigit():
+        return False
+    
+    horas = int(horas)
+    minutos = int(minutos)
+    if horas < 0 or horas > 23:
+        return False
+    if minutos < 0 or minutos > 59:
+        return False
+    return True
+
+def validar_monto(monto):
+    try:
+        monto_valor = int(monto)
+    except:
+        return False
+    if monto_valor <= 0:
+        return False
+    return True
 
 def existe_marca(marca_ingresada):
     marcas_cargadas = cargar_marcas()
