@@ -67,7 +67,7 @@ def cargar_marcas():
         contenido = limpiar_contenido(contenido)
         return contenido
     except:
-        print("Error: el archivo aviones.txt no existe")
+        return []
 
 def guardar_modelo(modelo,marca,asientos_ejecutiva,asientos_turista,asientos_economica):
     ruta_archivo = "archivos/modeloAviones.txt"
@@ -94,7 +94,7 @@ def cargar_modelos():
         contenido = limpiar_contenido(contenido)
         return contenido
     except:
-        print("Error: el archivo modeloAviones.txt no existe")
+        return []
 
 def cargar_aerolineas():
     ruta_archivo = "archivos/aerolineas.txt"
@@ -104,7 +104,7 @@ def cargar_aerolineas():
         contenido = limpiar_contenido(contenido)
         return contenido
     except:
-        print("Error: el archivo aerolineas.txt no existe")
+        return []
 
 def guardar_aerolinea(nombre,centro_operaciones):
     ruta_archivo = "archivos/aerolineas.txt"
@@ -131,8 +131,8 @@ def cargar_usuarios():
         contenido = limpiar_contenido(contenido)
         return contenido
     except:
-        print("Error: el archivo acceso.txt no existe")
-
+        print("Error: el archivo acceso.txt no existe ")
+        return []
 
 def cargar_aviones():
     ruta_archivo = "archivos/avionesAerolineas.txt"
@@ -142,7 +142,7 @@ def cargar_aviones():
         contenido = limpiar_contenido(contenido)
         return contenido
     except:
-        print("Error: el archivo avionesAerolineas.txt no existe")
+        return []
 
 def guardar_avion(matricula, marca, modelo, año, aerolinea):
     ruta_archivo = "archivos/avionesAerolineas.txt"
@@ -186,7 +186,7 @@ def cargar_vuelos():
         contenido = limpiar_contenido(contenido)
         return contenido
     except:
-        print("Error: el archivo vuelos.txt no existe")
+        return []
 
 def obtener_cantidad_asientos(matricula):
     aviones_cargados = cargar_aviones()

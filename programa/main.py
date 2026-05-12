@@ -92,17 +92,17 @@ def menu_gestion_marcas():
                 incluir_marca()
             elif opcion_ingresada == 2:
                 if not marcas:
-                    print("Error: no hay marcas registradas para eliminar.")
+                    print("Error: no hay marcas registradas para eliminar o el archivo no existe.")
                 else:
                     eliminar_marca(marcas)
             elif opcion_ingresada == 3:
                 if not marcas:
-                    print("Error: no hay marcas registradas para modificar.")
+                    print("Error: no hay marcas registradas para modificar o el archivo no existe.")
                 else:
                     modificar_marca(marcas)
             elif opcion_ingresada == 4:
                 if not marcas:
-                    print("Error: no hay marcas registradas para mostrar.")
+                    print("Error: no hay marcas registradas para mostrar el archivo no existe.")
                 else:
                     mostrar_marcas()
             elif opcion_ingresada == 5: 
@@ -225,24 +225,24 @@ def menu_gestion_modelos():
                 continue
             if opcion_ingresada == 1:
                 if not marcas:
-                    print("Error: no hay marcas registradas para crear modelos.")
+                    print("Error: no hay marcas registradas para crear modelos o el archivo no existe.")
                 else:
                     incluir_modelo(marcas)
             elif opcion_ingresada == 2:
                 if not modelos:
-                    print("Error: no hay modelos registrados.")
+                    print("Error: no hay modelos registrados o el archivo no existe.")
                 else:
                     eliminar_modelo(modelos)
             elif opcion_ingresada == 3:
                 if not modelos:
-                    print("Error: no hay modelos registrados.")
+                    print("Error: no hay modelos registrados o el archivo no existe.")
                 elif not marcas:
-                    print("Error: no hay marcas registradas.")
+                    print("Error: no hay marcas registradas o el archivo no existe.")
                 else:
                     modificar_modelo(modelos)
             elif opcion_ingresada == 4:
                 if not modelos:
-                    print("Error: no hay modelos registrados para mostrar.")
+                    print("Error: no hay modelos registrados para mostrar o el archivo no existe.")
                 else:
                     mostrar_modelos()
             elif opcion_ingresada == 5: 
@@ -579,17 +579,17 @@ def menu_gestion_aerolineas():
                 incluir_aerolinea()
             elif opcion_ingresada == 2:
                 if not aerolineas:
-                    print("Error: no hay aerolineas registradas.")
+                    print("Error: no hay aerolineas registradas o el archivo no existe.")
                 else:
                     eliminar_aerolinea(aerolineas)
             elif opcion_ingresada == 3:
                 if not aerolineas:
-                    print("Error: no hay aerolineas registradas.")
+                    print("Error: no hay aerolineas registradas o el archivo no existe.")
                 else:
                     modificar_aerolinea(aerolineas)
             elif opcion_ingresada == 4:
                 if not aerolineas:
-                    print("Error: no hay aerolineas registradas para mostrar.")
+                    print("Error: no hay aerolineas registradas para mostrar o el archivo no existe.")
                 else:
                     mostrar_aerolineas()
             elif opcion_ingresada == 5: 
@@ -750,32 +750,32 @@ def menu_gestion_aviones_aerolineas():
                 continue
             if opcion_ingresada == 1:
                 if not marcas:
-                    print("Error: no hay marcas registradas.")
+                    print("Error: no hay marcas registradas o el archivo no existe.")
                 elif not modelos:
-                    print("Error: no hay modelos registrados.")
+                    print("Error: no hay modelos registrados o el archivo no existe.")
                 elif not aerolineas:
-                    print("Error: no hay aerolineas registradas.")
+                    print("Error: no hay aerolineas registradas o el archivo no existe.")
                 else:
                     incluir_avion(marcas, aerolineas)
             elif opcion_ingresada == 2:
                 if not aviones:
-                    print("Error: no hay aviones registrados para eliminar.")
+                    print("Error: no hay aviones registrados para eliminar o el archivo no existe.")
                 else:
                     eliminar_avion(aviones)
             elif opcion_ingresada == 3:
                 if not aviones:
-                    print("Error: no hay aviones registrados para modificar.")
+                    print("Error: no hay aviones registrados para modificar o el archivo no existe.")
                 elif not marcas:
-                    print("Error: no hay marcas registradas.")
+                    print("Error: no hay marcas registradas o el archivo no existe.")
                 elif not modelos:
-                    print("Error: no hay modelos registrados.")
+                    print("Error: no hay modelos registrados o el archivo no existe.")
                 elif not aerolineas:
-                    print("Error: no hay aerolineas registradas.")
+                    print("Error: no hay aerolineas registradas o el archivo no existe.")
                 else:
                     modificar_avion(aviones)
             elif opcion_ingresada == 4:
                 if not aviones:
-                    print("Error: no hay aviones registrados para mostrar.")
+                    print("Error: no hay aviones registrados para mostrar o el archivo no existe.")
                 else:
                     mostrar_aviones()
             elif opcion_ingresada == 5: 
@@ -1134,24 +1134,24 @@ def menu_gestion_vuelos():
                 continue
             if opcion_ingresada == 1:
                 if not aviones:
-                    print("Error: no hay aviones registrados para incluirlos en un vuelo")
+                    print("Error: no hay aviones registrados para incluirlos en un vuelo o el archivo no existe")
                 else:
                     incluir_vuelo(vuelos)
             elif opcion_ingresada == 2:
                 if not vuelos:
-                    print("Error: no hay vuelos registrados para eliminar.")
+                    print("Error: no hay vuelos registrados para eliminar o el archivo no existe.")
                 else:
                     eliminar_vuelo(vuelos)
             elif opcion_ingresada == 3:
                 if not vuelos:
-                    print("Error: no hay vuelos registrados para modificar.")
+                    print("Error: no hay vuelos registrados para modificar o el archivo no existe.")
                 elif not aviones:
-                    print("Error: no hay aviones registrados para incluirlos en un vuelo")
+                    print("Error: no hay aviones registrados para incluirlos en un vuelo o el archivo no existe")
                 else:
                     modificar_vuelo(vuelos)
             elif opcion_ingresada == 4:
                 if not vuelos:
-                    print("Error: no hay vuelos registrados.")
+                    print("Error: no hay vuelos registrados o el archivo no existe.")
                 else:
                     ""
             elif opcion_ingresada == 5:
@@ -1259,7 +1259,7 @@ def incluir_vuelo(contenido_vuelos):
     while not aerolinea_valida:
         aerolineas = cargar_aerolineas()
         if not aerolineas:
-            print("Error: no hay aerolineas registradas.")
+            print("Error: no hay aerolineas registradas o el archivo no existe.")
             return
         mostrar_aerolineas()
         indice_ingresado = input("Ingrese el numero de opcion de la aerolinea (0 para regresar): ")
@@ -1277,7 +1277,7 @@ def incluir_vuelo(contenido_vuelos):
                 aerolinea_seleccionada = aerolineas[indice_ingresado-1].strip().split(";")[0]
                 aviones_disponibles = mostrar_aviones_aerolinea(aerolinea_seleccionada)
                 if not aviones_disponibles:
-                    print("Error: no hay aviones registrados para esta aerolinea.")
+                    print("Error: no hay aviones registrados para esta aerolinea o el archivo no existe.")
                 else:
                     aerolinea_valida = True
         else:
@@ -1584,7 +1584,7 @@ def modificar_vuelo_hora_arribo(vuelo_seleccionado, contenido_anterior, indice_s
 def modificar_vuelo_aerolinea(vuelo_seleccionado, contenido_anterior, indice_seleccionado):
     aerolineas = cargar_aerolineas()
     if not aerolineas:
-        print("Error: no hay aerolineas registradas.")
+        print("Error: no hay aerolineas registradas o el archivo no existe.")
         return modificar_vuelo_aux(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
 
     mostrar_aerolineas()
@@ -1609,7 +1609,7 @@ def modificar_vuelo_aerolinea(vuelo_seleccionado, contenido_anterior, indice_sel
                 aerolinea_seleccionada = aerolineas[indice_ingresado-1].strip().split(";")[0]
                 aviones_disponibles = mostrar_aviones_aerolinea(aerolinea_seleccionada)
                 if not aviones_disponibles:
-                    print("Error: no hay aviones registrados para esta aerolinea.")
+                    print("Error: no hay aviones registrados para esta aerolinea o el archivo no existe.")
                 else:
                     indice_matricula_valido = False
                     while not indice_matricula_valido:
@@ -1642,7 +1642,7 @@ def modificar_vuelo_aerolinea(vuelo_seleccionado, contenido_anterior, indice_sel
 def modificar_vuelo_matricula(vuelo_seleccionado, contenido_anterior, indice_seleccionado):
     aviones_disponibles = mostrar_aviones_aerolinea(vuelo_seleccionado[7])
     if not aviones_disponibles:
-        print("Error: no hay aviones registrados para esta aerolinea.")
+        print("Error: no hay aviones registrados para esta aerolinea o el archivo no existe.")
         return modificar_vuelo_aux(vuelo_seleccionado, contenido_anterior, indice_seleccionado)
 
     indice_valido = False
